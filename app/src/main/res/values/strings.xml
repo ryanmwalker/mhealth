@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">mHealth</string>
+
+    <!-- Snackbars -->
+    <string name="snackbar_request_permission">Request</string>
+    <string name="snackbar_dismiss">Dismiss</string>
+
+    <!-- Permissions -->
+    <string name="permission_explain">Hardware permissions required for this app to work</string>
+    <string name="permission_explain_gps">Location data permission required for GPS access</string>
+    <string name="permission_explain_write_storage">Storage write permission required to save data</string>
+    <string name="permission_explain_wake_lock">Wake lock permission required to record sensor data</string>
+
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_new">New</string>
+    <string name="nav_start">Start</string>
+    <string name="nav_save">Save</string>
+    <string name="nav_raw">Raw Data</string>
+    <string name="nav_accelerometer">Accelerometer</string>
+    <string name="nav_gravity">Gravity</string>
+    <string name="nav_gyroscope">Gyroscope</string>
+
+    <!-- New participant fragment-->
+    <string name="input_text_id">ID</string>
+    <string name="input_text_pain">Any pain (Back, Leg, Head, etc.)</string>
+    <string name="input_text_med">Any medication (in 3 days)</string>
+    <string name="input_text_walk">Any problems walking</string>
+    <string name="input_text_sex">Sex:</string>
+    <string name="new_sex_male_label">Male</string>
+    <string name="new_sex_female_label">Female</string>
+    <string name="input_button_save">Create</string>
+
+    <!-- Raw sensor data fragment -->
+    <string name="raw_acc_header">Accelerometer</string>
+    <string name="raw_acc_world_header">Accelerometer (world basis)</string>
+    <string name="raw_gyro_header">Gyroscope</string>
+    <string name="raw_rotation_header">Rotation Matrix</string>
+
+    <!-- Subject info fragment -->
+    <string name="subInfo_label_date">Date:</string>
+    <string name="subInfo_label_subNum">Subject ID:</string>
+    <string name="subInfo_label_sex">Sex:</string>
+    <string name="subInfo_label_delete_button">Delete subject</string>
+    <string name="subInfo_message_recording">(Cannot delete while recording data)</string>
+
+    <!-- Start fragment -->
+    <string name="start_label_subID">Subject ID:</string>
+    <string name="start_button_label_start">Start</string>
+    <string name="start_button_label_stop">Stop</string>
+    <string name="start_recording_complete">Recording complete.</string>
+    <string name="start_recording">Recording…</string>
+    <string name="start_recording_progress">(recording in progress)</string>
+
+    <!-- Save fragment -->
+    <string name="save_button_text">Save</string>
+    <string name="save_button_text_quit">Quit</string>
+    <string name="save_instruction_text">Sensor data collected. Click to save the data and quit the current session:</string>
+    <string name="save_no_data_text">No sensor data collected. Click to quit the current session:</string>
+    <string name="save_message_recording">Cannot save or quit while recording data</string>
+
+    <string name="device_sensors_label">Sensors:</string>
+    <string name="device_sensors_explanation">(availability and hardware vendor)</string>
+
+    <string name="device_accelerometer_label">Accelerometer:</string>
+    <string name="device_gyroscope_label">Gyroscope:</string>
+    <string name="device_gravity_label">Gravity:</string>
+    <string name="device_magnetometer_label">Magnetometer:</string>
+
+</resources>
