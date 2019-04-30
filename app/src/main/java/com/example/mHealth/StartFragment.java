@@ -84,6 +84,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
         if (!MainActivity.dataRecordStarted){
             try{
                 //Disable the hamburger, and swipes, while recording
@@ -98,7 +99,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                 startButton.setText(R.string.start_button_label_stop);
 
                 //Insert start time of recording
-                dbHelper.setStartTime(Short.parseShort(dbHelper.getTempSubInfo("subID")), System.currentTimeMillis());
+                dbHelper.setStartTime(dbHelper.getTempSubInfo("subID"), System.currentTimeMillis());
 
                 //Start the service
                 Intent startService = new Intent(mainActivity, SensorService.class);
@@ -124,7 +125,9 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             mainActivity.hamburger.syncState();
 
             //Show snackbar message for recording complete
-            Snackbar.make(coordinatorLayout, R.string.start_recording_complete, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(coordinatorLayout, R.string.start_recording_complete, Snackbar.LENGTH_SHORT).show();//Change fragment to subject info screen. Do not add this fragment to the backstack
+            mainActivity.addFragment(new SaveFragment(), true);
+
         }
     }
 

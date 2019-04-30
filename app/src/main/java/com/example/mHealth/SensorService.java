@@ -252,7 +252,7 @@ public class SensorService extends Service implements SensorEventListener {
         }
 
         public void run() {
-            dbHelper.insertDataTemp(Short.parseShort(dbHelper.getTempSubInfo("subID")),
+            dbHelper.insertDataTemp(dbHelper.getTempSubInfo("subID"),
                     this.curTime,
                     this.accelerometerMatrix,
                     this.gyroscopeMatrix,

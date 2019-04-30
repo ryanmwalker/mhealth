@@ -16,6 +16,8 @@ import java.io.IOException;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
+import static java.lang.Boolean.TRUE;
+
 public class DBHelper extends SQLiteOpenHelper {
     public static final String TAG = "DBHelper";
 
@@ -33,22 +35,31 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SUBJECTS_TABLE_NAME = "subjects";
     public static final String SUBJECTS_TABLE_NAME_TEMP = "subjects_temp";
     public static final String SUBJECTS_ID = "id";
+    public static final String SUBJECTS_FIRST_NAME = "first";
+    public static final String SUBJECTS_LAST_NAME = "last";
     public static final String SUBJECTS_PAIN = "pain";
     public static final String SUBJECTS_MEDICATION = "medication";
     public static final String SUBJECTS_WALKING = "walking";
     public static final String SUBJECTS_SEX = "sex";
+    public static final String SUBJECTS_WEIGHT = "weight";
+    public static final String SUBJECTS_HEIGHT = "height";
     public static final String SUBJECTS_DATE = "date";
     public static final String SUBJECTS_START_TIME = "starttime";
-
+    public static final String SUBJECTS_VALIDATION = "valid";
     //Subject table structure
     private static final String SUBJECTS_TABLE_STRUCTURE =
-            " (" + SUBJECTS_ID + " INTEGER PRIMARY KEY, " +
+            " (" + SUBJECTS_ID + " TEXT PRIMARY KEY, " +
                     SUBJECTS_DATE + " TEXT default CURRENT_TIMESTAMP, " +
+                    SUBJECTS_FIRST_NAME + " TEXT, " +
+                    SUBJECTS_LAST_NAME + " TEXT, " +
                     SUBJECTS_PAIN + " TEXT, " +
                     SUBJECTS_MEDICATION + " TEXT, " +
                     SUBJECTS_WALKING + " TEXT, " +
                     SUBJECTS_SEX + " TEXT, " +
-                    SUBJECTS_START_TIME + " INTEGER " +
+                    SUBJECTS_WEIGHT + " TEXT, " +
+                    SUBJECTS_HEIGHT + " TEXT, " +
+                    SUBJECTS_START_TIME + " INTEGER, " +
+                    SUBJECTS_VALIDATION + " TEXT " +
                     ")";
 
     //SQL to create subject table
@@ -57,7 +68,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //SQL to create TEMP subject table
     private static final String SUBJECTS_TABLE_CREATE_TEMP =
-            "CREATE TEMP TABLE " + SUBJECTS_TABLE_NAME_TEMP + SUBJECTS_TABLE_STRUCTURE;
+            "CREATE TEMP TABLE subjects_temp" + SUBJECTS_TABLE_STRUCTURE;
 
     //Constants for identifying data table and fields
     public static final String DATA_TABLE_NAME = "data";
@@ -199,15 +210,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void createTempTables(SQLiteDatabase db){
         Log.d(TAG, "Creating Temp tables");
-
         //Create temp tables
         db.execSQL(SUBJECTS_TABLE_CREATE_TEMP);
         db.execSQL(DATA_TABLE_CREATE_TEMP);
     }
 
-    public boolean checkSubjectExists(Short subID) throws SQLException {
+    public boolean checkSubjectExists(String subID) throws SQLException {
         //Check if subject exists in persistent subject table
-        String query = "SELECT * FROM " + SUBJECTS_TABLE_NAME + " WHERE " + SUBJECTS_ID + "=" + subID;
+        String query = "SELECT * FROM " + SUBJECTS_TABLE_NAME + " WHERE " + SUBJECTS_ID + "=" + "'" + subID + "'";
 
         Cursor c = db.rawQuery(query, null);
         boolean exists = (c.getCount() > 0);
@@ -216,9 +226,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    public boolean checkSubjectDataExists(Short subID) throws SQLException {
+    public boolean checkSubjectDataExists(String subID) throws SQLException {
         //Check if sensor data, for this subject, exists in the temp data table
-        String query = "SELECT * FROM " + DATA_TABLE_NAME_TEMP + " WHERE " + DATA_SUBJECT + "=" + subID;
+        String query = "SELECT * FROM " + DATA_TABLE_NAME_TEMP + " WHERE " + DATA_SUBJECT + "=" + "'" + subID + "'";
 
         Cursor c = db.rawQuery(query, null);
         boolean exists = (c.getCount() > 0);
@@ -227,25 +237,30 @@ public class DBHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    public void insertSubjectTemp(Short subID, String date, String pain,
+    public void insertSubjectTemp(String subID, String date, String first, String last, String pain,
                                  String medication, String walking,
-                                 String sex, long time) throws SQLException {
+                                 String sex, String weight, String height, long time) throws SQLException {
 
         ContentValues subjectData = new ContentValues();
         subjectData.put(SUBJECTS_ID, subID);
         subjectData.put(SUBJECTS_DATE, date);
+        subjectData.put(SUBJECTS_FIRST_NAME, first);
+        subjectData.put(SUBJECTS_LAST_NAME, last);
         subjectData.put(SUBJECTS_PAIN, pain);
         subjectData.put(SUBJECTS_MEDICATION, medication);
         subjectData.put(SUBJECTS_WALKING, walking);
         subjectData.put(SUBJECTS_SEX, sex);
+        subjectData.put(SUBJECTS_WEIGHT, weight);
+        subjectData.put(SUBJECTS_HEIGHT, height);
         subjectData.put(SUBJECTS_START_TIME, time);
-        db.insertOrThrow(SUBJECTS_TABLE_NAME_TEMP, null, subjectData);
+        subjectData.put(SUBJECTS_VALIDATION, true);
+        db.insert(SUBJECTS_TABLE_NAME_TEMP, null, subjectData);
     }
 
-    public void setStartTime(Short subID, long time) throws SQLException {
+    public void setStartTime(String subID, long time) throws SQLException {
         ContentValues cv = new ContentValues();
         cv.put(SUBJECTS_START_TIME, time);
-        db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_ID + " = " + subID, null);
+        db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_ID + " = " + "'" + subID + "'", null);
     }
 
     public String getTempSubInfo(String type) throws SQLException {
@@ -263,6 +278,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 case "date":
                     result = c.getString(c.getColumnIndex(SUBJECTS_DATE));
                     break;
+                case "first":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_FIRST_NAME));
+                    break;
+                case "last":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_LAST_NAME));
+                    break;
                 case "pain":
                     result = c.getString(c.getColumnIndex(SUBJECTS_PAIN));
                     break;
@@ -275,8 +296,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 case "sex":
                     result = c.getString(c.getColumnIndex(SUBJECTS_SEX));
                     break;
+                case "weight":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_WEIGHT));
+                    break;
+                case "height":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_HEIGHT));
+                    break;
                 case "time":
                     result = c.getString(c.getColumnIndex(SUBJECTS_START_TIME));
+                    break;
+                case "valid":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_VALIDATION));
                     break;
             }
         }
@@ -291,7 +321,19 @@ public class DBHelper extends SQLiteOpenHelper {
         db.delete(DATA_TABLE_NAME_TEMP, null,null);
     }
 
-    public void insertDataTemp(short subID, long time,
+    public void validateSubject(String subID, Boolean validate) throws SQLException {
+        ContentValues cv = new ContentValues();
+        cv.put(SUBJECTS_VALIDATION, validate.toString());
+        db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_ID + " = " + "'" + subID + "'", null);
+    }
+
+    public void resetSubject() throws SQLException {
+        //Delete subject rows from temp data tables. Table is not removed.
+        db.delete(DATA_TABLE_NAME_TEMP, null,null);
+        MainActivity.dataRecordStarted = false;
+    }
+
+    public void insertDataTemp(String subID, long time,
                               float[] acc,
                               float[] gyro,
                               float[] rot) throws SQLException {
@@ -339,7 +381,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
             String arrStr[] = {curCSV.getString(0), curCSV.getString(1), curCSV.getString(2),
                     curCSV.getString(3), curCSV.getString(4), curCSV.getString(5),
-                    curCSV.getString(6)};
+                    curCSV.getString(6), curCSV.getString(7), curCSV.getString(8),
+                    curCSV.getString(9), curCSV.getString(10), curCSV.getString(11)};
 
             csvWrite.writeNext(arrStr);
         }
@@ -352,7 +395,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         csvWrite = new CSVWriter(new FileWriter(outputFile));
 
-        curCSV = db.rawQuery("SELECT * FROM " + DATA_TABLE_NAME + " WHERE id = " + subID, null);
+        curCSV = db.rawQuery("SELECT * FROM " + DATA_TABLE_NAME + " WHERE id = " + "'" + subID + "'", null);
 
         csvWrite.writeNext(curCSV.getColumnNames());
 

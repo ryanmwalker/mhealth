@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity
 
         //Create the logger
         String pathToExternalStorage = Environment.getExternalStorageDirectory().toString();
-        File logFileDir = new File(pathToExternalStorage, "/mHealth/");
+        File logFileDir = new File(pathToExternalStorage, "/mHealth/db");
         logger = new Logger(logFileDir);
 
         //Get fragment manager

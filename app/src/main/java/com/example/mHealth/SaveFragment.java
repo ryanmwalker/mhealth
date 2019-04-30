@@ -43,6 +43,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
     Boolean subjectDataExists;
     MediaScanner mediaScanner;
     static ProgressDialog dialog;
+    private Button resetButton;
 
     public SaveFragment() {
         // Required empty public constructor
@@ -69,6 +70,10 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         saveButton = (Button) view.findViewById(R.id.saveButton);
         saveButton.setOnClickListener(this);
 
+        resetButton = (Button) view.findViewById(R.id.resetButton);
+        resetButton.setOnClickListener(this);
+
+
         //Get DBHelper
         dbHelper = DBHelper.getInstance(getActivity(), new DatabaseHandler());
 
@@ -79,7 +84,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         } else {
             saveButton.setEnabled(true);
 
-            subjectDataExists = dbHelper.checkSubjectDataExists(Short.parseShort(dbHelper.getTempSubInfo("subID")));
+            subjectDataExists = dbHelper.checkSubjectDataExists(dbHelper.getTempSubInfo("subID"));
 
             //only offer to save if sensor data exists, otherwise, just quit
             if (subjectDataExists) {
@@ -102,33 +107,58 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
         if (subjectDataExists) {
             alertDialogBuilder.setTitle("Save?");
-            alertDialogBuilder.setMessage("Are you sure you want to save and start a new session?");
+            alertDialogBuilder.setMessage("Is participant data valid?");
         } else {
             alertDialogBuilder.setTitle("Quit?");
             alertDialogBuilder.setMessage("Are you sure you want to quit the current session? \n\n No data will be saved.");
         }
 
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                //Save if sensor data exists, otherwise quit
-                if (subjectDataExists) {
-                    new ExportDatabaseCSVTask().execute();
-                } else {
-                    quitSession();
-                }
-            }
-        });
 
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
+        switch(v.getId()){
 
-        AlertDialog quitAlertDialog = alertDialogBuilder.create();
-        quitAlertDialog.show();
+            case R.id.saveButton:
+                alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Save if sensor data exists, otherwise quit
+                        if (subjectDataExists) {
+                            new ExportDatabaseCSVTask().execute();
+                        } else {
+                            quitSession();
+                        }
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Save if sensor data exists, otherwise quit
+                        if (subjectDataExists) {
+                            //dbHelper.validateSubject(false);
+                            new ExportDatabaseCSVTask().execute();
+                        } else {
+                            quitSession();
+                        }
+                    }
+                });
+
+                alertDialogBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog quitAlertDialog = alertDialogBuilder.create();
+                quitAlertDialog.show();
+
+                break;
+
+            case R.id.resetButton:
+                dbHelper.resetSubject();
+                mainActivity.addFragment(new StartFragment(), true);
+                break;
+        }
     }
 
     //Quit the current session and go back to main
@@ -138,6 +168,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         startActivity(intent);
         getActivity().finishAffinity();
     }
+
 
     //Message handler class for database progress updates
     private static class DatabaseHandler extends Handler {

@@ -19,12 +19,14 @@
     <dimen name="new_form_element_height">60dp</dimen>
     <dimen name="new_input_width">200dp</dimen>
     <dimen name="new_input_height_spinner">70dp</dimen>
-    <dimen name="new_input_height_cm">130dp</dimen>
     <dimen name="new_input_height_in">65dp</dimen>
     <dimen name="new_input_height_ft">65dp</dimen>
     <dimen name="new_height_symbol_top_padding">15dp</dimen>
     <dimen name="new_height_label_right_padding">20dp</dimen>
-    <dimen name="new_sex_label_right_padding">35dp</dimen>
+    <dimen name="new_form_element_weight">60dp</dimen>
+    <dimen name="new_input_weight_lb">65dp</dimen>
+    <dimen name="new_weight_label_right_padding">20dp</dimen>
+    <dimen name="new_sex_label_right_padding">20dp</dimen>
 
     <!-- Subject Info fragment -->
     <dimen name="subInfo_layout_padding">30dp</dimen>

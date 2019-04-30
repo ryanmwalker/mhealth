@@ -21,8 +21,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import static java.lang.System.currentTimeMillis;
 
 public class NewFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
@@ -32,8 +35,12 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     CoordinatorLayout coordinatorLayout;
     DBHelper dbHelper;
 
-    TextInputLayout raWrapper;
-    TextInputLayout subIDWrapper;
+
+    TextInputLayout firstWrapper;
+    TextInputLayout lastWrapper;
+    TextInputLayout feetWrapper;
+    TextInputLayout inchesWrapper;
+    TextInputLayout poundsWrapper;
     CheckBox        painWrapper;
     CheckBox        medWrapper;
     CheckBox        walkWrapper;
@@ -41,9 +48,10 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     RadioGroup sexGroup;
     Button loginButton;
 
+
     public NewFragment() {
         // Required empty public constructor
-    }
+    }        String valid = String.valueOf((boolean) true);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,15 +64,19 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         mainActivity.navigationView.setCheckedItem(R.id.nav_new);
 
         //Set actionbar title
-        mainActivity.setTitle("New Subject");
+        mainActivity.setTitle("New Participant");
 
         //Get dbHelper
         dbHelper = DBHelper.getInstance(getActivity());
         //Get all text fields
-        subIDWrapper = (TextInputLayout) view.findViewById(R.id.input_id_wrapper);
+        firstWrapper = (TextInputLayout) view.findViewById(R.id.input_first_wrapper);
+        lastWrapper = (TextInputLayout) view.findViewById(R.id.input_last_wrapper);
         painWrapper = (CheckBox) view.findViewById(R.id.input_pain_wrapper);
         medWrapper = (CheckBox) view.findViewById(R.id.input_med_wrapper);
         walkWrapper = (CheckBox) view.findViewById(R.id.input_walk_wrapper);
+        feetWrapper = (TextInputLayout) view.findViewById(R.id.input_feet_wrapper);
+        inchesWrapper = (TextInputLayout) view.findViewById(R.id.input_inches_wrapper);
+        poundsWrapper = (TextInputLayout) view.findViewById(R.id.input_pounds_wrapper);
         //Listener for create button
         loginButton = (Button) view.findViewById(R.id.input_submit);
         loginButton.setOnClickListener(this);
@@ -88,13 +100,19 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     @Override
     public void onClick(View v) {
         //Get input values
-        String subID = subIDWrapper.getEditText().getText().toString();
+        long ts = currentTimeMillis()/1000;
+        String subID = lastWrapper.getEditText().getText().toString() + ts;
+        String first = firstWrapper.getEditText().getText().toString();
+        String last = lastWrapper.getEditText().getText().toString();
         String pain = String.valueOf(painWrapper.isChecked());
         String medication = String.valueOf(medWrapper.isChecked());
         String walking = String.valueOf(walkWrapper.isChecked());
         TextView sexLabel = (TextView) mainActivity.findViewById(R.id.input_label_sex);
+
         sexGroup = (RadioGroup) mainActivity.findViewById(R.id.input_sex);
         int sexID = sexGroup.getCheckedRadioButtonId();
+        String height = feetWrapper.getEditText().getText().toString() + "'" + inchesWrapper.getEditText().getText().toString() + '"';
+        String weight = poundsWrapper.getEditText().getText().toString();
 
         if (sexID != -1) {
             View radioButton = sexGroup.findViewById(sexID);
@@ -104,50 +122,54 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
             sexLabel.setTextColor(ContextCompat.getColor(getContext(), R.color.colorSecondaryText));
         }
 
-        //If all the validation passes, submit the form. Else, show errors
+        //If all the validation passes, submit the form. Else, BOOLEANshow errors
         if (!isEmpty(subID) & sexID != -1) {
             //Turn all errors off
-            subIDWrapper.setError(null);
+            lastWrapper.setError(null);
             //check if subject already exists in main persistent subject table
-            if(!dbHelper.checkSubjectExists(Short.parseShort(subID))){
+            if(!dbHelper.checkSubjectExists(subID)){
                 //subject doesn't already exist
 
                 //Insert subject into TEMP subject table
                 MainActivity.subCreated = true;
 
                 dbHelper.insertSubjectTemp(
-                        Short.parseShort(subID),
+                        subID,
                         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(new Date()),
+                        first,
+                        last,
                         pain,
                         medication,
                         walking,
                         sex,
+                        weight,
+                        height,
                         0
                 );
 
-                //Hide the keyboard on click
+                //Hide the keyboard on clickDBHelper dbHelper;
                 showKeyboard(false, mainActivity);
 
                 //Enable additional menu items/fragments for recording and saving sensor data
                 mainActivity.navigationView.getMenu().findItem(R.id.nav_start).setEnabled(true);
                 mainActivity.navigationView.getMenu().findItem(R.id.nav_save).setEnabled(true);
-                mainActivity.navigationView.getMenu().findItem(R.id.nav_new).setTitle("Subject Info");
+                mainActivity.navigationView.getMenu().findItem(R.id.nav_new).setTitle("Participant Info");
 
-                Snackbar.make(coordinatorLayout, "Subject created", Snackbar.LENGTH_SHORT).show();
-                mainActivity.logger.i(getActivity(),TAG, "Subject #" + subID + " created");
+                Snackbar.make(coordinatorLayout, "Participant created", Snackbar.LENGTH_SHORT).show();
+                mainActivity.logger.i(getActivity(),TAG, "Participant #" + subID + " created");
 
                 //Change fragment to subject info screen. Do not add this fragment to the backstack
-                mainActivity.addFragment(new SubjectInfoFragment(), false);
+                mainActivity.addFragment(new StartFragment(), false);
             } else {
                 //subject exists. Set focus on subject number field
                 Snackbar.make(coordinatorLayout,"Subject number already exists...", Snackbar.LENGTH_SHORT).show();
-                subIDWrapper.requestFocus();
+                lastWrapper.requestFocus();
             }
         } else {
             if (isEmpty(subID)) {
-                subIDWrapper.setError("Subject ID required");
+                lastWrapper.setError("Participant name required");
             } else {
-                subIDWrapper.setError(null);
+                lastWrapper.setError(null);
             }
 
             //If no radio button has been selected
