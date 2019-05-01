@@ -21,7 +21,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -44,14 +43,20 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     CheckBox        painWrapper;
     CheckBox        medWrapper;
     CheckBox        walkWrapper;
-    String sex;
+    CheckBox        tbiWrapper;
+    CheckBox        asianWrapper;
+    CheckBox        blackWrapper;
+    CheckBox        whiteWrapper;
+    CheckBox        otherWrapper;
+    CheckBox        hispanicWrapper;
+    String sex = null;
     RadioGroup sexGroup;
     Button loginButton;
 
 
     public NewFragment() {
         // Required empty public constructor
-    }        String valid = String.valueOf((boolean) true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +79,12 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         painWrapper = (CheckBox) view.findViewById(R.id.input_pain_wrapper);
         medWrapper = (CheckBox) view.findViewById(R.id.input_med_wrapper);
         walkWrapper = (CheckBox) view.findViewById(R.id.input_walk_wrapper);
+        tbiWrapper = (CheckBox) view.findViewById(R.id.input_tbi_wrapper);
+        asianWrapper = (CheckBox) view.findViewById(R.id.input_asian_wrapper);
+        blackWrapper = (CheckBox) view.findViewById(R.id.input_black_wrapper);
+        whiteWrapper = (CheckBox) view.findViewById(R.id.input_white_wrapper);
+        hispanicWrapper = (CheckBox) view.findViewById(R.id.input_hispanic_wrapper);
+        otherWrapper = (CheckBox) view.findViewById(R.id.input_other_wrapper);
         feetWrapper = (TextInputLayout) view.findViewById(R.id.input_feet_wrapper);
         inchesWrapper = (TextInputLayout) view.findViewById(R.id.input_inches_wrapper);
         poundsWrapper = (TextInputLayout) view.findViewById(R.id.input_pounds_wrapper);
@@ -107,11 +118,23 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         String pain = String.valueOf(painWrapper.isChecked());
         String medication = String.valueOf(medWrapper.isChecked());
         String walking = String.valueOf(walkWrapper.isChecked());
+        String tbi = String.valueOf(tbiWrapper.isChecked());
+        String asian = String.valueOf(asianWrapper.isChecked());
+        String black = String.valueOf(blackWrapper.isChecked());
+        String white = String.valueOf(whiteWrapper.isChecked());
+        String other = String.valueOf(otherWrapper.isChecked());
+        String hispanic = String.valueOf(hispanicWrapper.isChecked());
         TextView sexLabel = (TextView) mainActivity.findViewById(R.id.input_label_sex);
-
         sexGroup = (RadioGroup) mainActivity.findViewById(R.id.input_sex);
+
         int sexID = sexGroup.getCheckedRadioButtonId();
+
         String height = feetWrapper.getEditText().getText().toString() + "'" + inchesWrapper.getEditText().getText().toString() + '"';
+
+        if (height.equals("'" + '"')){
+            height = null;
+        }
+
         String weight = poundsWrapper.getEditText().getText().toString();
 
         if (sexID != -1) {
@@ -123,8 +146,9 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         }
 
         //If all the validation passes, submit the form. Else, BOOLEANshow errors
-        if (!isEmpty(subID) & sexID != -1) {
+        if (!isEmpty(first) & !isEmpty(last)) {
             //Turn all errors off
+            firstWrapper.setError(null);
             lastWrapper.setError(null);
             //check if subject already exists in main persistent subject table
             if(!dbHelper.checkSubjectExists(subID)){
@@ -141,7 +165,13 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
                         pain,
                         medication,
                         walking,
+                        tbi,
                         sex,
+                        asian,
+                        black,
+                        white,
+                        other,
+                        hispanic,
                         weight,
                         height,
                         0
@@ -162,13 +192,15 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
                 mainActivity.addFragment(new StartFragment(), false);
             } else {
                 //subject exists. Set focus on subject number field
-                Snackbar.make(coordinatorLayout,"Subject number already exists...", Snackbar.LENGTH_SHORT).show();
-                lastWrapper.requestFocus();
+                Snackbar.make(coordinatorLayout,"Participant already exists...", Snackbar.LENGTH_SHORT).show();
+                firstWrapper.requestFocus();
             }
         } else {
-            if (isEmpty(subID)) {
-                lastWrapper.setError("Participant name required");
+            if (isEmpty(first) || isEmpty(last)) {
+                firstWrapper.setError("First name required");
+                lastWrapper.setError("Last name required");
             } else {
+                firstWrapper.setError(null);
                 lastWrapper.setError(null);
             }
 

@@ -17,7 +17,7 @@
 
     <string name="nav_new">New</string>
     <string name="nav_start">Start</string>
-    <string name="nav_save">Save</string>
+    <string name="nav_save">Admin</string>
     <string name="nav_raw">Raw Data</string>
     <string name="nav_accelerometer">Accelerometer</string>
     <string name="nav_gravity">Gravity</string>
@@ -26,12 +26,20 @@
     <!-- New participant fragment-->
     <string name="input_text_name">Name:</string>
     <string name="input_text_pain">Any pain (Back, Leg, Head, etc.)</string>
-    <string name="input_text_med">Any medication (in 3 days)</string>
+    <string name="input_text_med">Any medication (in last 3 days)</string>
     <string name="input_text_walk">Any problems walking</string>
+    <string name="input_text_tbi">Ever had a concussion</string>
     <string name="input_text_sex">Gender:</string>
+    <string name="input_text_race">Race/Ethnicity:</string>
+    <string name="input_text_selectall">(Select all that apply)</string>
     <string name="new_sex_male_label">Male</string>
     <string name="new_sex_female_label">Female</string>
     <string name="new_sex_other_label">Other</string>
+    <string name="ethnicity_hispanic_label">Hispanic/Latino</string>
+    <string name="race_white_label">White</string>
+    <string name="race_black_label">Black</string>
+    <string name="race_asian_label">Asian</string>
+    <string name="race_other_label">Other</string>
     <string name="input_text_height">Height:</string>
     <string name="input_text_weight">Weight:</string>
     <string name="input_button_save">Submit</string>
@@ -50,13 +58,13 @@
     <string name="subInfo_message_recording">(Cannot delete while recording data)</string>
 
     <!-- Start fragment -->
-    <string name="start_label_subID">Subject ID:</string>
+    <string name="start_label_subID">Participant ID:</string>
     <string name="start_button_label_start">Start</string>
     <string name="start_button_label_stop">Stop</string>
     <string name="start_button_label_continue">Continue</string>
     <string name="start_recording_complete">Recording complete.</string>
-    <string name="start_recording">Recording…</string>
-    <string name="start_recording_progress">(recording in progress)</string>
+    <string name="start_recording">Begin walking.</string>
+    <string name="start_recording_progress">Recording in progress...</string>
 
     <!-- Save fragment -->
     <string name="save_button_text">Save</string>

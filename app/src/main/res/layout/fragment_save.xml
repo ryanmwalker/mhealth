@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/saveExplanationText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="30dp"
         android:text="@string/save_button_text" />
 
     <Button
@@ -28,6 +28,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/saveButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="30dp"
         android:text="Reset"/>
+
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/resetButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="Exit"/>
 </RelativeLayout>

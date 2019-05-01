@@ -21,7 +21,7 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_first_wrapper"
-            android:layout_width="150dp"
+            android:layout_width="145dp"
             android:layout_height="60dp"
             android:layout_below="@id/input_name_wrapper">
             <android.support.design.widget.TextInputEditText
@@ -33,12 +33,13 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_last_wrapper"
-            android:layout_width="150dp"
+            android:layout_width="145dp"
             android:layout_height="60dp"
+            android:layout_below="@id/input_name_wrapper"
             android:layout_alignBaseline="@+id/input_first_wrapper"
             android:layout_alignBottom="@+id/input_first_wrapper"
-            android:layout_marginStart="125dp"
-            android:layout_toEndOf="@+id/input_name_wrapper">
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@+id/input_first_wrapper">
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -48,7 +49,7 @@
         <CheckBox
             android:id="@+id/input_pain_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/new_form_element_height"
+            android:layout_height="wrap_content"
             android:layout_below="@id/input_first_wrapper"
             android:text="@string/input_text_pain" >
         </CheckBox>
@@ -56,7 +57,7 @@
         <CheckBox
             android:id="@+id/input_med_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/new_form_element_height"
+            android:layout_height="wrap_content"
             android:layout_below="@id/input_pain_wrapper"
             android:text="@string/input_text_med" >
         </CheckBox>
@@ -64,16 +65,24 @@
         <CheckBox
             android:id="@+id/input_walk_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/new_form_element_height"
+            android:layout_height="wrap_content"
             android:layout_below="@id/input_med_wrapper"
             android:text="@string/input_text_walk" >
+        </CheckBox>
+
+        <CheckBox
+            android:id="@+id/input_tbi_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_walk_wrapper"
+            android:text="@string/input_text_tbi" >
         </CheckBox>
 
         <TextView
             android:id="@+id/input_label_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/input_walk_wrapper"
+            android:layout_below="@id/input_tbi_wrapper"
             android:gravity="center_vertical"
             android:paddingEnd="@dimen/new_sex_label_right_padding"
             android:text="@string/input_text_sex" />
@@ -81,10 +90,8 @@
         <RadioGroup
             android:id="@+id/input_sex"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/new_form_element_height"
+            android:layout_height="wrap_content"
             android:layout_below="@id/input_label_sex"
-            android:gravity="center_horizontal"
-            android:paddingTop="15dp"
             android:orientation="horizontal">
 
             <RadioButton
@@ -109,10 +116,64 @@
         </RadioGroup>
 
         <TextView
+            android:id="@+id/input_label_race"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_sex"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/new_sex_label_right_padding"
+            android:text="@string/input_text_race" />
+        <CheckBox
+            android:id="@+id/input_asian_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_label_race"
+            android:text="@string/race_asian_label" >
+        </CheckBox>
+
+        <CheckBox
+            android:id="@+id/input_black_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/input_asian_wrapper"
+            android:layout_alignBottom="@+id/input_asian_wrapper"
+            android:layout_toEndOf="@+id/input_asian_wrapper"
+            android:text="@string/race_black_label" >
+        </CheckBox>
+
+        <CheckBox
+            android:id="@+id/input_white_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/input_black_wrapper"
+            android:layout_alignBottom="@+id/input_black_wrapper"
+            android:layout_toEndOf="@+id/input_black_wrapper"
+            android:text="@string/race_white_label">
+        </CheckBox>
+
+        <CheckBox
+            android:id="@+id/input_other_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/input_white_wrapper"
+            android:layout_alignBottom="@+id/input_white_wrapper"
+            android:layout_toEndOf="@+id/input_white_wrapper"
+            android:text="@string/race_other_label">
+        </CheckBox>
+
+        <CheckBox
+            android:id="@+id/input_hispanic_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_asian_wrapper"
+            android:text="@string/ethnicity_hispanic_label">
+        </CheckBox>
+
+        <TextView
             android:id="@+id/input_height_wrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/input_sex"
+            android:layout_below="@+id/input_hispanic_wrapper"
             android:text="@string/input_text_height"/>
 
         <android.support.design.widget.TextInputLayout
@@ -121,25 +182,37 @@
             android:layout_height="60dp"
             android:layout_alignBaseline="@+id/input_height_wrapper"
             android:layout_alignBottom="@+id/input_height_wrapper"
-            android:layout_marginStart="28dp"
-            android:layout_toEndOf="@+id/input_height_wrapper"
-            android:ems="10"
-            android:hint="ft"
-            android:inputType="numberDecimal"
-            android:autofillHints="0">
+            android:layout_below="@+id/input_height_wrapper"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@+id/input_height_wrapper">
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="ft"
+                android:inputType="numberDecimal"
+                android:autofillHints="0"/>
         </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/label_feet"
+            android:layout_width="20dp"
+            android:layout_height="38dp"
+            android:layout_alignBaseline="@+id/input_feet_wrapper"
+            android:layout_alignBottom="@+id/input_feet_wrapper"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/input_feet_wrapper"
+            android:text="'" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_inches_wrapper"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_alignBaseline="@+id/input_height_wrapper"
-            android:layout_alignBottom="@+id/input_height_wrapper"
-            android:layout_marginStart="100dp"
-            android:layout_toEndOf="@+id/input_height_wrapper">
+            android:layout_alignBaseline="@+id/input_feet_wrapper"
+            android:layout_alignBottom="@+id/input_feet_wrapper"
+            android:layout_below="@+id/input_height_wrapper"
+            android:layout_marginStart="25dp"
+            android:layout_toEndOf="@+id/input_feet_wrapper">
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -150,15 +223,14 @@
         </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:id="@+id/label_height"
-            android:layout_width="82dp"
-            android:layout_height="36dp"
-            android:layout_alignBaseline="@+id/input_feet_wrapper"
-            android:layout_alignBottom="@+id/input_feet_wrapper"
-            android:layout_marginStart="175dp"
-            android:paddingTop="15dp"
-            android:layout_toEndOf="@+id/input_height_wrapper"
-            android:text="feet/inches" />
+            android:id="@+id/label_inches"
+            android:layout_width="20dp"
+            android:layout_height="38dp"
+            android:layout_alignBaseline="@+id/input_inches_wrapper"
+            android:layout_alignBottom="@+id/input_inches_wrapper"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/input_inches_wrapper"
+            android:text="''" />
 
         <TextView
             android:id="@+id/input_weight_wrapper"
@@ -175,7 +247,7 @@
             android:layout_height="60dp"
             android:layout_alignBaseline="@+id/input_weight_wrapper"
             android:layout_alignBottom="@+id/input_weight_wrapper"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="15dp"
             android:layout_toEndOf="@+id/input_weight_wrapper">
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -183,9 +255,9 @@
                 android:ems="10"
                 android:hint="0"
                 android:inputType="numberDecimal"
+                android:password="true"
                 android:autofillHints="0"/>
         </android.support.design.widget.TextInputLayout>
-
 
         <TextView
             android:id="@+id/label_weight"
@@ -193,9 +265,9 @@
             android:layout_height="36dp"
             android:layout_alignBaseline="@+id/input_pounds_wrapper"
             android:layout_alignBottom="@+id/input_pounds_wrapper"
-            android:layout_marginStart="100dp"
-            android:paddingTop="15dp"
-            android:layout_toEndOf="@+id/input_weight_wrapper"
+            android:layout_marginStart="15dp"
+            android:paddingTop="14dp"
+            android:layout_toEndOf="@+id/input_pounds_wrapper"
             android:text="lbs" />
 
 

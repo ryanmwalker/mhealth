@@ -223,8 +223,9 @@ public class Logger{
 
             // Gets the log file from primary storage. If it does
             // not exist, the file is created.
-            if (!logFile.exists())
+            if (!logFile.exists()) {
                 logFile.createNewFile();
+            }
 
             // Write the message to the log with a timestamp
             BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true));

@@ -1,8 +1,10 @@
 package com.example.mHealth;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.SQLException;
@@ -28,6 +30,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SaveFragment extends Fragment implements View.OnClickListener {
 
@@ -54,14 +57,14 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_save, container, false);
-        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_layout);
+        coordinatorLayout = (CoordinatorLayout) Objects.requireNonNull(getActivity()).findViewById(R.id.coordinator_layout);
 
         //Set the nav drawer item highlight
         mainActivity = (MainActivity) getActivity();
         mainActivity.navigationView.setCheckedItem(R.id.nav_save);
 
         //Set actionbar title
-        mainActivity.setTitle("Save Data");
+        mainActivity.setTitle("Data Validation");
 
         //Get explanation text view
         explanationText = (TextView) view.findViewById(R.id.saveExplanationText);
@@ -106,7 +109,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mainActivity);
 
         if (subjectDataExists) {
-            alertDialogBuilder.setTitle("Save?");
+            alertDialogBuilder.setTitle("Valid?");
             alertDialogBuilder.setMessage("Is participant data valid?");
         } else {
             alertDialogBuilder.setTitle("Quit?");
@@ -122,9 +125,10 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int id) {
                         //Save if sensor data exists, otherwise quit
                         if (subjectDataExists) {
+                            dbHelper.validateSubject(dbHelper.getTempSubInfo("subID"),true);
                             new ExportDatabaseCSVTask().execute();
                         } else {
-                            quitSession();
+                            newUserSession();
                         }
                     }
                 });
@@ -134,10 +138,10 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int id) {
                         //Save if sensor data exists, otherwise quit
                         if (subjectDataExists) {
-                            //dbHelper.validateSubject(false);
+                            dbHelper.validateSubject(dbHelper.getTempSubInfo("subID"),false);
                             new ExportDatabaseCSVTask().execute();
                         } else {
-                            quitSession();
+                            newUserSession();
                         }
                     }
                 });
@@ -155,18 +159,20 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.resetButton:
-                dbHelper.resetSubject();
+                dbHelper.resetSubjectData();
                 mainActivity.addFragment(new StartFragment(), true);
                 break;
         }
     }
 
     //Quit the current session and go back to main
-    private void quitSession(){
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        getActivity().finishAffinity();
+    private void newUserSession(){
+        dbHelper.deleteSubjectTemp();
+        dbHelper.closeDB();
+        Context context = getContext();
+        Intent startIntent = new Intent(context, MainActivity.class);
+        startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(startIntent);
     }
 
 
@@ -176,14 +182,15 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         public void handleMessage (Message msg){
             Double progressPercent = (Double) msg.obj;
 
-            Integer progressValue = 40 + (int) Math.ceil(progressPercent/2);
+            int progressValue = 40 + (int) Math.ceil(progressPercent/2);
 
             dialog.setProgress(progressValue);
         }
     }
 
     //Async class for CSV export task
-    public class ExportDatabaseCSVTask extends AsyncTask<String, Integer, Boolean> {
+    @SuppressLint("StaticFieldLeak")
+    private class ExportDatabaseCSVTask extends AsyncTask<String, Integer, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -202,7 +209,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
             //Create directories for the output csv files
             String pathToExternalStorage = Environment.getExternalStorageDirectory().toString();
             File exportDir = new File(pathToExternalStorage, "/mHealth");
-            File subjectDataDir = new File(exportDir, "/subjects");
+            File subjectDataDir = new File(exportDir, "/walking");
 
             publishProgress(5);
             SystemClock.sleep(100);
@@ -255,7 +262,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                     SystemClock.sleep(300);
 
                     //Export subjects table/tracking sheet
-                    File trackingSheet = new File(exportDir, "trackingSheet.csv");
+                    File trackingSheet = new File(exportDir, "status.csv");
 
                     try {
                         dbHelper.exportTrackingSheet(trackingSheet);
@@ -266,7 +273,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                     publishProgress(40);
                     SystemClock.sleep(300);
 
-                    if(exportDataCSV) {
+                    if (exportDataCSV) {
                         //Export individual subject data
                         String subID = dbHelper.getTempSubInfo("subID");
                         File subjectFile = new File(subjectDataDir, subID + ".csv");
@@ -288,7 +295,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
                     mediaScanner = new MediaScanner();
 
-                    try{
+                    try {
                         mediaScanner.scanFile(getContext(), allFiles, null, mainActivity.logger);
                     } catch (Exception e) {
                         mainActivity.logger.e(getActivity(), TAG, "Media scanner exception", e);
@@ -296,7 +303,6 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
                     publishProgress(100);
                     SystemClock.sleep(400);
-
                     return true;
                 } catch (SQLException | IOException e) {
                     mainActivity.logger.e(getActivity(), TAG, "Save data exception", e);
@@ -349,7 +355,8 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
             if (success) {
                 //Restart app and go back to login screen
-                quitSession();
+
+                newUserSession();
             }
         }
 

@@ -116,14 +116,14 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
                 mainActivity.logger.i(getActivity(), TAG, "Subject deleted: #" + dbHelper.getTempSubInfo("subNum"));
 
                 //Clear the temp table of this users data
-                dbHelper.deleteSubject();
+                dbHelper.deleteSubjectTemp();
 
                 //Set subCreated flag to false
                 MainActivity.subCreated = false;
 
                 return true;
             } catch (SQLException e){
-                mainActivity.logger.e(getActivity(), TAG, "SQL error deleteSubject()",e);
+                mainActivity.logger.e(getActivity(), TAG, "SQL error deleteSubjectTemp()",e);
 
                 Snackbar.make(coordinatorLayout, "Error: " + e.getMessage(), Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {

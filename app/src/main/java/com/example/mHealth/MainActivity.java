@@ -1,6 +1,7 @@
 package com.example.mHealth;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.io.File;
+import java.util.Objects;
 
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -74,22 +76,17 @@ public class MainActivity extends AppCompatActivity
         }
 
         Log.d(TAG, "onCreate called");
-
         setContentView(R.layout.activity_main);
-
         inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         //Create the logger
         String pathToExternalStorage = Environment.getExternalStorageDirectory().toString();
-        File logFileDir = new File(pathToExternalStorage, "/mHealth/db");
+        File logFileDir = new File(pathToExternalStorage, "/mHealth/");
         logger = new Logger(logFileDir);
 
         //Get fragment manager
         fragmentManager = getSupportFragmentManager();
-
-        //First fragment is blank. So set initial fragment to 'new' instead
-        addFragment(new NewFragment(), true);
 
         //Set the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -101,12 +98,16 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(hamburger);
         hamburger.syncState();
-
+        hamburger.setDrawerIndicatorEnabled(false);
         //Disable menu items that should display when a user exists
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().findItem(R.id.nav_start).setEnabled(false);
+        navigationView.getMenu().findItem(R.id.nav_start).setEnabled(false).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_save).setEnabled(false);
+
+        //First fragment is blank. So set initial fragment to 'new' instead
+        addFragment(new NewFragment(), true);
+        toolbar.setTitle("New Participant");
 
         //Create dbHelper
         dbHelper = DBHelper.getInstance(this);

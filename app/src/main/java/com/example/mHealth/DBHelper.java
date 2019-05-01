@@ -40,7 +40,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SUBJECTS_PAIN = "pain";
     public static final String SUBJECTS_MEDICATION = "medication";
     public static final String SUBJECTS_WALKING = "walking";
+    public static final String SUBJECTS_TBI = "tbi";
     public static final String SUBJECTS_SEX = "sex";
+    public static final String SUBJECTS_ASIAN = "asian";
+    public static final String SUBJECTS_BLACK = "black";
+    public static final String SUBJECTS_WHITE = "white";
+    public static final String SUBJECTS_OTHER = "other";
+    public static final String SUBJECTS_HISPANIC = "hispanic";
     public static final String SUBJECTS_WEIGHT = "weight";
     public static final String SUBJECTS_HEIGHT = "height";
     public static final String SUBJECTS_DATE = "date";
@@ -55,7 +61,13 @@ public class DBHelper extends SQLiteOpenHelper {
                     SUBJECTS_PAIN + " TEXT, " +
                     SUBJECTS_MEDICATION + " TEXT, " +
                     SUBJECTS_WALKING + " TEXT, " +
+                    SUBJECTS_TBI + " TEXT, " +
                     SUBJECTS_SEX + " TEXT, " +
+                    SUBJECTS_ASIAN + " TEXT, " +
+                    SUBJECTS_BLACK + " TEXT, " +
+                    SUBJECTS_WHITE + " TEXT, " +
+                    SUBJECTS_OTHER + " TEXT, " +
+                    SUBJECTS_HISPANIC + " TEXT, " +
                     SUBJECTS_WEIGHT + " TEXT, " +
                     SUBJECTS_HEIGHT + " TEXT, " +
                     SUBJECTS_START_TIME + " INTEGER, " +
@@ -238,8 +250,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void insertSubjectTemp(String subID, String date, String first, String last, String pain,
-                                 String medication, String walking,
-                                 String sex, String weight, String height, long time) throws SQLException {
+                                  String medication, String tbi, String walking, String sex, String asian,
+                                  String black, String white, String other,String hispanic, String weight,
+                                  String height, long time) throws SQLException {
 
         ContentValues subjectData = new ContentValues();
         subjectData.put(SUBJECTS_ID, subID);
@@ -249,7 +262,13 @@ public class DBHelper extends SQLiteOpenHelper {
         subjectData.put(SUBJECTS_PAIN, pain);
         subjectData.put(SUBJECTS_MEDICATION, medication);
         subjectData.put(SUBJECTS_WALKING, walking);
+        subjectData.put(SUBJECTS_TBI, tbi);
         subjectData.put(SUBJECTS_SEX, sex);
+        subjectData.put(SUBJECTS_ASIAN, asian);
+        subjectData.put(SUBJECTS_BLACK, black);
+        subjectData.put(SUBJECTS_WHITE, white);
+        subjectData.put(SUBJECTS_OTHER, other);
+        subjectData.put(SUBJECTS_HISPANIC, hispanic);
         subjectData.put(SUBJECTS_WEIGHT, weight);
         subjectData.put(SUBJECTS_HEIGHT, height);
         subjectData.put(SUBJECTS_START_TIME, time);
@@ -293,8 +312,26 @@ public class DBHelper extends SQLiteOpenHelper {
                 case "walking":
                     result = c.getString(c.getColumnIndex(SUBJECTS_WALKING));
                     break;
+                case "tbi":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_TBI));
+                    break;
                 case "sex":
                     result = c.getString(c.getColumnIndex(SUBJECTS_SEX));
+                    break;
+                case "asian":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_ASIAN));
+                    break;
+                case "black":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_BLACK));
+                    break;
+                case "white":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_WHITE));
+                    break;
+                case "other":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_OTHER));
+                    break;
+                case "hispanic":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_HISPANIC));
                     break;
                 case "weight":
                     result = c.getString(c.getColumnIndex(SUBJECTS_WEIGHT));
@@ -315,7 +352,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public void deleteSubject() throws SQLException {
+    public void deleteSubjectTemp() throws SQLException {
         //Delete subject rows from temp subject and data tables. Table is not removed.
         db.delete(SUBJECTS_TABLE_NAME_TEMP, null, null);
         db.delete(DATA_TABLE_NAME_TEMP, null,null);
@@ -327,7 +364,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_ID + " = " + "'" + subID + "'", null);
     }
 
-    public void resetSubject() throws SQLException {
+    public void resetSubjectData() throws SQLException {
         //Delete subject rows from temp data tables. Table is not removed.
         db.delete(DATA_TABLE_NAME_TEMP, null,null);
         MainActivity.dataRecordStarted = false;
@@ -382,7 +419,9 @@ public class DBHelper extends SQLiteOpenHelper {
             String arrStr[] = {curCSV.getString(0), curCSV.getString(1), curCSV.getString(2),
                     curCSV.getString(3), curCSV.getString(4), curCSV.getString(5),
                     curCSV.getString(6), curCSV.getString(7), curCSV.getString(8),
-                    curCSV.getString(9), curCSV.getString(10), curCSV.getString(11)};
+                    curCSV.getString(9), curCSV.getString(10), curCSV.getString(11),
+                    curCSV.getString(12), curCSV.getString(13), curCSV.getString(14),
+                    curCSV.getString(15), curCSV.getString(16), curCSV.getString(17)};
 
             csvWrite.writeNext(arrStr);
         }
