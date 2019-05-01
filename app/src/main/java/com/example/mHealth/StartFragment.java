@@ -58,7 +58,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
         //Get form text view element and set
         recordProgressMessage = (TextView) view.findViewById(R.id.start_recording_progress);
-        recordProgressMessage.setText("Ready to begin walking?");
+        recordProgressMessage.setText(R.string.start_recording_ready);
 
         //Set onclick listener for save button
         startButton = (Button) view.findViewById(R.id.startButton);
