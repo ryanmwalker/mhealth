@@ -16,8 +16,6 @@ import java.io.IOException;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-import static java.lang.Boolean.TRUE;
-
 public class DBHelper extends SQLiteOpenHelper {
     public static final String TAG = "DBHelper";
 
@@ -31,10 +29,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "mHealth.db";
     private static final int DATABASE_VERSION = 1;
     public String databasePath = "";
+
     //Constants for identifying subject table and fields
     public static final String SUBJECTS_TABLE_NAME = "subjects";
     public static final String SUBJECTS_TABLE_NAME_TEMP = "subjects_temp";
     public static final String SUBJECTS_ID = "id";
+    public static final String SUBJECTS_KEY = "subID";
     public static final String SUBJECTS_FIRST_NAME = "first";
     public static final String SUBJECTS_LAST_NAME = "last";
     public static final String SUBJECTS_PAIN = "pain";
@@ -42,6 +42,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SUBJECTS_WALKING = "walking";
     public static final String SUBJECTS_TBI = "tbi";
     public static final String SUBJECTS_SEX = "sex";
+    public static final String SUBJECTS_MULTIPLE = "multiple_tbi";
+    public static final String SUBJECTS_MONTHS = "six_months";
     public static final String SUBJECTS_ASIAN = "asian";
     public static final String SUBJECTS_BLACK = "black";
     public static final String SUBJECTS_WHITE = "white";
@@ -53,8 +55,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SUBJECTS_START_TIME = "starttime";
     public static final String SUBJECTS_VALIDATION = "valid";
     //Subject table structure
-    private static final String SUBJECTS_TABLE_STRUCTURE =
-            " (" + SUBJECTS_ID + " TEXT PRIMARY KEY, " +
+    private static final String SUBJECTS_TABLE_STRUCTURE = "(" +
+                    SUBJECTS_ID + " TEXT, " +
+                    SUBJECTS_KEY + " TEXT PRIMARY KEY, " +
                     SUBJECTS_DATE + " TEXT default CURRENT_TIMESTAMP, " +
                     SUBJECTS_FIRST_NAME + " TEXT, " +
                     SUBJECTS_LAST_NAME + " TEXT, " +
@@ -62,6 +65,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     SUBJECTS_MEDICATION + " TEXT, " +
                     SUBJECTS_WALKING + " TEXT, " +
                     SUBJECTS_TBI + " TEXT, " +
+                    SUBJECTS_MONTHS + " TEXT, " +
+                    SUBJECTS_MULTIPLE + " TEXT, " +
                     SUBJECTS_SEX + " TEXT, " +
                     SUBJECTS_ASIAN + " TEXT, " +
                     SUBJECTS_BLACK + " TEXT, " +
@@ -122,7 +127,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     DATA_ROT7 + " REAL, " +
                     DATA_ROT8 + " REAL, " +
                     DATA_ROT9 + " REAL, " +
-                    "FOREIGN KEY(" + DATA_SUBJECT + ") REFERENCES " + SUBJECTS_TABLE_NAME + "(" + SUBJECTS_ID + ")" +
+                    "FOREIGN KEY(" + DATA_SUBJECT + ") REFERENCES " + SUBJECTS_TABLE_NAME + "(" + SUBJECTS_KEY + ")" +
                     ")";
 
     //SQL to create data table
@@ -229,7 +234,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean checkSubjectExists(String subID) throws SQLException {
         //Check if subject exists in persistent subject table
-        String query = "SELECT * FROM " + SUBJECTS_TABLE_NAME + " WHERE " + SUBJECTS_ID + "=" + "'" + subID + "'";
+        String query = "SELECT * FROM " + SUBJECTS_TABLE_NAME + " WHERE " + SUBJECTS_KEY + "=" + "'" + subID + "'";
 
         Cursor c = db.rawQuery(query, null);
         boolean exists = (c.getCount() > 0);
@@ -249,13 +254,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    public void insertSubjectTemp(String subID, String date, String first, String last, String pain,
-                                  String medication, String tbi, String walking, String sex, String asian,
-                                  String black, String white, String other,String hispanic, String weight,
+    public void insertSubjectTemp(String id, String subID, String date, String first, String last, String pain,
+                                  String medication, String tbi, String walking, String sex, String six_months, String multiple_tbi,
+                                  String asian, String black, String white, String other,String hispanic, String weight,
                                   String height, long time) throws SQLException {
 
         ContentValues subjectData = new ContentValues();
-        subjectData.put(SUBJECTS_ID, subID);
+        subjectData.put(SUBJECTS_ID, id);
+        subjectData.put(SUBJECTS_KEY, subID);
         subjectData.put(SUBJECTS_DATE, date);
         subjectData.put(SUBJECTS_FIRST_NAME, first);
         subjectData.put(SUBJECTS_LAST_NAME, last);
@@ -264,6 +270,8 @@ public class DBHelper extends SQLiteOpenHelper {
         subjectData.put(SUBJECTS_WALKING, walking);
         subjectData.put(SUBJECTS_TBI, tbi);
         subjectData.put(SUBJECTS_SEX, sex);
+        subjectData.put(SUBJECTS_MONTHS, six_months);
+        subjectData.put(SUBJECTS_MULTIPLE, multiple_tbi);
         subjectData.put(SUBJECTS_ASIAN, asian);
         subjectData.put(SUBJECTS_BLACK, black);
         subjectData.put(SUBJECTS_WHITE, white);
@@ -272,14 +280,14 @@ public class DBHelper extends SQLiteOpenHelper {
         subjectData.put(SUBJECTS_WEIGHT, weight);
         subjectData.put(SUBJECTS_HEIGHT, height);
         subjectData.put(SUBJECTS_START_TIME, time);
-        subjectData.put(SUBJECTS_VALIDATION, true);
+        subjectData.put(SUBJECTS_VALIDATION, "TRUE");
         db.insert(SUBJECTS_TABLE_NAME_TEMP, null, subjectData);
     }
 
     public void setStartTime(String subID, long time) throws SQLException {
         ContentValues cv = new ContentValues();
         cv.put(SUBJECTS_START_TIME, time);
-        db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_ID + " = " + "'" + subID + "'", null);
+        db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_KEY + " = " + "'" + subID + "'", null);
     }
 
     public String getTempSubInfo(String type) throws SQLException {
@@ -291,8 +299,11 @@ public class DBHelper extends SQLiteOpenHelper {
         if(c.getCount() > 0){
             c.moveToFirst();
             switch(type){
-                case "subID":
+                case "id":
                     result = c.getString(c.getColumnIndex(SUBJECTS_ID));
+                    break;
+                case "subID":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_KEY));
                     break;
                 case "date":
                     result = c.getString(c.getColumnIndex(SUBJECTS_DATE));
@@ -317,6 +328,12 @@ public class DBHelper extends SQLiteOpenHelper {
                     break;
                 case "sex":
                     result = c.getString(c.getColumnIndex(SUBJECTS_SEX));
+                    break;
+                case "six_months":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_MONTHS));
+                    break;
+                case "multiple_tbi":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_MULTIPLE));
                     break;
                 case "asian":
                     result = c.getString(c.getColumnIndex(SUBJECTS_ASIAN));
@@ -361,7 +378,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void validateSubject(String subID, Boolean validate) throws SQLException {
         ContentValues cv = new ContentValues();
         cv.put(SUBJECTS_VALIDATION, validate.toString());
-        db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_ID + " = " + "'" + subID + "'", null);
+        db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_KEY + " = " + "'" + subID + "'", null);
     }
 
     public void resetSubjectData() throws SQLException {
@@ -421,7 +438,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     curCSV.getString(6), curCSV.getString(7), curCSV.getString(8),
                     curCSV.getString(9), curCSV.getString(10), curCSV.getString(11),
                     curCSV.getString(12), curCSV.getString(13), curCSV.getString(14),
-                    curCSV.getString(15), curCSV.getString(16), curCSV.getString(17)};
+                    curCSV.getString(15), curCSV.getString(16), curCSV.getString(17),
+                    curCSV.getString(18), curCSV.getString(19), curCSV.getString(20)};
 
             csvWrite.writeNext(arrStr);
         }

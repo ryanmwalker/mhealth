@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.io.File;
@@ -47,6 +48,8 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
     MediaScanner mediaScanner;
     static ProgressDialog dialog;
     private Button resetButton;
+    CheckBox invalidWrapper;
+
 
     public SaveFragment() {
         // Required empty public constructor
@@ -76,6 +79,8 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         resetButton = (Button) view.findViewById(R.id.resetButton);
         resetButton.setOnClickListener(this);
 
+        //Get validate checkbox
+        invalidWrapper = (CheckBox) view.findViewById(R.id.input_validate_wrapper);
 
         //Get DBHelper
         dbHelper = DBHelper.getInstance(getActivity(), new DatabaseHandler());
@@ -96,8 +101,22 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
             } else {
                 explanationText.setText(getResources().getString(R.string.save_no_data_text));
                 saveButton.setText(getResources().getString(R.string.save_button_text_quit));
+                resetButton.setVisibility(View.INVISIBLE);
+                invalidWrapper.setVisibility(View.GONE);
             }
         }
+
+        //listener for validate, validates data gathered
+        invalidWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (invalidWrapper.isChecked()) {
+                    dbHelper.validateSubject(dbHelper.getTempSubInfo("subID"), false);
+                } else {
+                    dbHelper.validateSubject(dbHelper.getTempSubInfo("subID"), true);
+                }
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
@@ -109,13 +128,12 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mainActivity);
 
         if (subjectDataExists) {
-            alertDialogBuilder.setTitle("Valid?");
-            alertDialogBuilder.setMessage("Is participant data valid?");
+            alertDialogBuilder.setTitle("Save?");
+            alertDialogBuilder.setMessage("Are you sure you want to save data and start a new session? \n\nRecorded data will be saved to database.");
         } else {
             alertDialogBuilder.setTitle("Quit?");
-            alertDialogBuilder.setMessage("Are you sure you want to quit the current session? \n\n No data will be saved.");
+            alertDialogBuilder.setMessage("Are you sure you want to quit the current session? \n\nNo participant data from this session will be saved.");
         }
-
 
         switch(v.getId()){
 
@@ -125,10 +143,10 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int id) {
                         //Save if sensor data exists, otherwise quit
                         if (subjectDataExists) {
-                            dbHelper.validateSubject(dbHelper.getTempSubInfo("subID"),true);
                             new ExportDatabaseCSVTask().execute();
                         } else {
-                            newUserSession();
+                            mainActivity.finish();
+                            mainActivity.moveTaskToBack(true);
                         }
                     }
                 });
@@ -136,13 +154,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                 alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        //Save if sensor data exists, otherwise quit
-                        if (subjectDataExists) {
-                            dbHelper.validateSubject(dbHelper.getTempSubInfo("subID"),false);
-                            new ExportDatabaseCSVTask().execute();
-                        } else {
-                            newUserSession();
-                        }
+                        dialog.cancel();
                     }
                 });
 
@@ -172,7 +184,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         Context context = getContext();
         Intent startIntent = new Intent(context, MainActivity.class);
         startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(startIntent);
+        Objects.requireNonNull(context).startActivity(startIntent);
     }
 
 
@@ -355,7 +367,6 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
             if (success) {
                 //Restart app and go back to login screen
-
                 newUserSession();
             }
         }

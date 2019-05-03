@@ -43,7 +43,7 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
         mainActivity.navigationView.setCheckedItem(R.id.nav_new);
 
         //Set actionbar title
-        mainActivity.setTitle("Subject Information");
+        mainActivity.setTitle("Participant Information");
 
         //Listener for delete button
         deleteButton = (Button) view.findViewById(R.id.subInfo_button_delete);
@@ -63,8 +63,8 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
         dbHelper = DBHelper.getInstance(getActivity());
 
         //Get form text view elements
-        TextView date = (TextView) view.findViewById(R.id.subInfo_value_date);
-        TextView subID = (TextView) view.findViewById(R.id.subInfo_value_subID);
+        TextView date = view.findViewById(R.id.subInfo_value_date);
+        TextView subID = view.findViewById(R.id.subInfo_value_subID);
 
         //Set the text view elements in layout to subject info from temp table
         date.setText(dbHelper.getTempSubInfo("date"));
@@ -78,7 +78,7 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mainActivity);
         alertDialogBuilder.setTitle("Delete?");
-        alertDialogBuilder.setMessage("Are you sure you want to delete the current subject?\n\n This action is irreversible.");
+        alertDialogBuilder.setMessage("Are you sure you want to delete the current participant?\n\n This is irreversible.");
 
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -105,7 +105,7 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
         @Override
         protected void onPreExecute() {
             dialog = new ProgressDialog(mainActivity);
-            dialog.setTitle("Delete subject");
+            dialog.setTitle("Delete Participant");
             dialog.setMessage("Please wait...");
             dialog.setCancelable(false);
             dialog.show();
@@ -113,7 +113,7 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
 
         protected Boolean doInBackground(final String... args) {
             try{
-                mainActivity.logger.i(getActivity(), TAG, "Subject deleted: #" + dbHelper.getTempSubInfo("subNum"));
+                mainActivity.logger.i(getActivity(), TAG, "Participant deleted: #" + dbHelper.getTempSubInfo("subNum"));
 
                 //Clear the temp table of this users data
                 dbHelper.deleteSubjectTemp();
@@ -143,7 +143,7 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
 
             if (success) {
                 //Restart the main activity
-                Snackbar.make(coordinatorLayout, "Subject deleted", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, "Participant deleted", Snackbar.LENGTH_SHORT).show();
                 mainActivity.recreate();
             }
         }

@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().findItem(R.id.nav_start).setEnabled(false).setVisible(false);
-        navigationView.getMenu().findItem(R.id.nav_save).setEnabled(false);
+        navigationView.getMenu().findItem(R.id.nav_save).setEnabled(true);
 
         //First fragment is blank. So set initial fragment to 'new' instead
         addFragment(new NewFragment(), true);

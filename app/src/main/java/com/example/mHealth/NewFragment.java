@@ -35,6 +35,7 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     DBHelper dbHelper;
 
 
+    TextInputLayout idWrapper;
     TextInputLayout firstWrapper;
     TextInputLayout lastWrapper;
     TextInputLayout feetWrapper;
@@ -48,6 +49,8 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     CheckBox        blackWrapper;
     CheckBox        whiteWrapper;
     CheckBox        otherWrapper;
+    CheckBox        sixWrapper;
+    CheckBox        multWrapper;
     CheckBox        hispanicWrapper;
     String sex = null;
     RadioGroup sexGroup;
@@ -57,6 +60,7 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     public NewFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,12 +78,16 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         //Get dbHelper
         dbHelper = DBHelper.getInstance(getActivity());
         //Get all text fields
+
+        idWrapper = (TextInputLayout) view.findViewById(R.id.input_id_wrapper);
         firstWrapper = (TextInputLayout) view.findViewById(R.id.input_first_wrapper);
         lastWrapper = (TextInputLayout) view.findViewById(R.id.input_last_wrapper);
         painWrapper = (CheckBox) view.findViewById(R.id.input_pain_wrapper);
         medWrapper = (CheckBox) view.findViewById(R.id.input_med_wrapper);
         walkWrapper = (CheckBox) view.findViewById(R.id.input_walk_wrapper);
         tbiWrapper = (CheckBox) view.findViewById(R.id.input_tbi_wrapper);
+        sixWrapper = (CheckBox) view.findViewById(R.id.input_sixmo_wrapper);
+        multWrapper = (CheckBox) view.findViewById(R.id.input_multiple_wrapper);
         asianWrapper = (CheckBox) view.findViewById(R.id.input_asian_wrapper);
         blackWrapper = (CheckBox) view.findViewById(R.id.input_black_wrapper);
         whiteWrapper = (CheckBox) view.findViewById(R.id.input_white_wrapper);
@@ -91,6 +99,20 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         //Listener for create button
         loginButton = (Button) view.findViewById(R.id.input_submit);
         loginButton.setOnClickListener(this);
+
+        //listener for tbi, prompts "if yes" questions
+        tbiWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tbiWrapper.isChecked()) {
+                    sixWrapper.setVisibility(View.VISIBLE);
+                    multWrapper.setVisibility(View.VISIBLE);
+                } else {
+                    sixWrapper.setVisibility(View.GONE);
+                    multWrapper.setVisibility(View.GONE);
+                }
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
@@ -112,6 +134,7 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     public void onClick(View v) {
         //Get input values
         long ts = currentTimeMillis()/1000;
+        String id = idWrapper.getEditText().getText().toString();
         String subID = lastWrapper.getEditText().getText().toString() + ts;
         String first = firstWrapper.getEditText().getText().toString();
         String last = lastWrapper.getEditText().getText().toString();
@@ -119,6 +142,8 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         String medication = String.valueOf(medWrapper.isChecked());
         String walking = String.valueOf(walkWrapper.isChecked());
         String tbi = String.valueOf(tbiWrapper.isChecked());
+        String sixmonth = String.valueOf(sixWrapper.isChecked());
+        String multiple = String.valueOf(multWrapper.isChecked());
         String asian = String.valueOf(asianWrapper.isChecked());
         String black = String.valueOf(blackWrapper.isChecked());
         String white = String.valueOf(whiteWrapper.isChecked());
@@ -134,6 +159,7 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         if (height.equals("'" + '"')){
             height = null;
         }
+
 
         String weight = poundsWrapper.getEditText().getText().toString();
 
@@ -158,6 +184,7 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
                 MainActivity.subCreated = true;
 
                 dbHelper.insertSubjectTemp(
+                        id,
                         subID,
                         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(new Date()),
                         first,
@@ -166,6 +193,8 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
                         medication,
                         walking,
                         tbi,
+                        sixmonth,
+                        multiple,
                         sex,
                         asian,
                         black,

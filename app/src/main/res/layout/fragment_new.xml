@@ -11,13 +11,22 @@
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true">
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_id_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="ID"/>
+        </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:id="@+id/input_name_wrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/input_text_name"/>
-
+        android:id="@+id/input_name_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/input_id_wrapper"
+        android:text="@string/input_text_name"/>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_first_wrapper"
@@ -78,11 +87,31 @@
             android:text="@string/input_text_tbi" >
         </CheckBox>
 
+        <CheckBox
+            android:id="@+id/input_sixmo_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_below="@id/input_tbi_wrapper"
+            android:visibility="gone"
+            android:text="@string/input_text_sixmo" >
+        </CheckBox>
+
+        <CheckBox
+            android:id="@+id/input_multiple_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_below="@id/input_sixmo_wrapper"
+            android:visibility="gone"
+            android:text="@string/input_text_multiple" >
+        </CheckBox>
+
         <TextView
             android:id="@+id/input_label_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/input_tbi_wrapper"
+            android:layout_below="@id/input_multiple_wrapper"
             android:gravity="center_vertical"
             android:paddingEnd="@dimen/new_sex_label_right_padding"
             android:text="@string/input_text_sex" />

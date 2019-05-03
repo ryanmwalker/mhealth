@@ -3,6 +3,7 @@ package com.example.mHealth;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.SQLException;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,7 +19,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.Objects;
 
 public class StartFragment extends Fragment implements View.OnClickListener {
 
@@ -30,6 +34,9 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     TextView recordProgressMessage;
     static MainActivity mainActivity;
     static ProgressDialog stopDialog;
+    ImageView mImageViewWalk;
+    ImageView mImageViewCheck;
+    AnimationDrawable walkAnimation;
 
 
 
@@ -44,7 +51,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.fragment_start, container, false);
 
-        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_layout);
+        coordinatorLayout = (CoordinatorLayout) Objects.requireNonNull(getActivity()).findViewById(R.id.coordinator_layout);
 
         //Set the nav drawer item highlight
         mainActivity = (MainActivity)getActivity();
@@ -57,11 +64,11 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         mainActivity.setTitle(dbHelper.getTempSubInfo("first") + " " + dbHelper.getTempSubInfo("last"));
 
         //Get form text view element and set
-        recordProgressMessage = (TextView) view.findViewById(R.id.start_recording_progress);
+        recordProgressMessage = view.findViewById(R.id.start_recording_progress);
         recordProgressMessage.setText(R.string.start_recording_ready);
 
         //Set onclick listener for save button
-        startButton = (Button) view.findViewById(R.id.startButton);
+        startButton = view.findViewById(R.id.startButton);
         startButton.setOnClickListener(this);
 
         //Set button state depending on whether recording has been started and/or stopped
@@ -81,8 +88,12 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             //Haven't started: enable START button
             startButton.setEnabled(true);
             startButton.setText(R.string.start_button_label_start);
-            startButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.graphY));
+            startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.graphY));
         }
+
+        mImageViewWalk = view.findViewById(R.id.walk);
+        walkAnimation = (AnimationDrawable) mImageViewWalk.getBackground();
+        mImageViewCheck = view.findViewById(R.id.check);
 
         // Inflate the layout for this fragment
         return view;
@@ -90,6 +101,9 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
+        mImageViewWalk.setVisibility(View.VISIBLE);
+        walkAnimation.start();
 
         if (!MainActivity.dataRecordStarted){
             try{
@@ -117,6 +131,9 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             }
         } else {
             MainActivity.dataRecordCompleted = true;
+            walkAnimation.stop();
+            mImageViewWalk.setVisibility(View.INVISIBLE);
+            mImageViewCheck.setVisibility(View.VISIBLE);
             startButton.setEnabled(false);
             startButton.setVisibility(View.GONE);
             recordProgressMessage.setText(R.string.start_recording_complete);
@@ -126,13 +143,9 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
             //Re-enable the hamburger, and swipes, after recording
             mainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-/*            mainActivity.hamburger.setDrawerIndicatorEnabled(true);
-            mainActivity.hamburger.syncState();*/
 
             //Show snackbar message for recording complete
             Snackbar.make(coordinatorLayout, R.string.start_recording_complete, Snackbar.LENGTH_SHORT).show();//Change fragment to subject info screen. Do not add this fragment to the backstack
-//            mainActivity.addFragment(new SaveFragment(), true);
-
         }
     }
 

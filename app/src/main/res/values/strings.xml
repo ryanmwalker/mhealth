@@ -24,14 +24,16 @@
     <string name="nav_gyroscope">Gyroscope</string>
 
     <!-- New participant fragment-->
+    <string name="input_text_id">ID:</string>
     <string name="input_text_name">Name:</string>
     <string name="input_text_pain">Any pain (Back, Leg, Head, etc.)</string>
     <string name="input_text_med">Any medication (in last 3 days)</string>
     <string name="input_text_walk">Any problems walking</string>
     <string name="input_text_tbi">Ever had a concussion</string>
+    <string name="input_text_sixmo">If yes, within the last six months?</string>
+    <string name="input_text_multiple">If yes, more than once?</string>
     <string name="input_text_sex">Gender:</string>
     <string name="input_text_race">Race/Ethnicity:</string>
-    <string name="input_text_selectall">(Select all that apply)</string>
     <string name="new_sex_male_label">Male</string>
     <string name="new_sex_female_label">Female</string>
     <string name="new_sex_other_label">Other</string>
