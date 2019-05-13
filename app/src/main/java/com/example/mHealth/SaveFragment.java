@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -50,17 +51,16 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
     private Button resetButton;
     CheckBox invalidWrapper;
 
-
     public SaveFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_save, container, false);
-        coordinatorLayout = (CoordinatorLayout) Objects.requireNonNull(getActivity()).findViewById(R.id.coordinator_layout);
+        coordinatorLayout = Objects.requireNonNull(getActivity()).findViewById(R.id.coordinator_layout);
 
         //Set the nav drawer item highlight
         mainActivity = (MainActivity) getActivity();
@@ -70,17 +70,17 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         mainActivity.setTitle("Data Validation");
 
         //Get explanation text view
-        explanationText = (TextView) view.findViewById(R.id.saveExplanationText);
+        explanationText = view.findViewById(R.id.saveExplanationText);
 
         //Get save button view
-        saveButton = (Button) view.findViewById(R.id.saveButton);
+        saveButton = view.findViewById(R.id.saveButton);
         saveButton.setOnClickListener(this);
 
-        resetButton = (Button) view.findViewById(R.id.resetButton);
+        resetButton = view.findViewById(R.id.resetButton);
         resetButton.setOnClickListener(this);
 
         //Get validate checkbox
-        invalidWrapper = (CheckBox) view.findViewById(R.id.input_validate_wrapper);
+        invalidWrapper = view.findViewById(R.id.input_validate_wrapper);
 
         //Get DBHelper
         dbHelper = DBHelper.getInstance(getActivity(), new DatabaseHandler());
@@ -172,6 +172,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
             case R.id.resetButton:
                 dbHelper.resetSubjectData();
+                MainActivity.dataRecordStarted = false;
                 mainActivity.addFragment(new StartFragment(), true);
                 break;
         }
@@ -235,7 +236,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
             SystemClock.sleep(100);
 
             if (!subjectDataDir.exists()) {
-                Boolean created = subjectDataDir.mkdirs();
+                boolean created = subjectDataDir.mkdirs();
                 mainActivity.logger.i(getActivity(), TAG, "Subject Dir created: " + created);
             }
 
