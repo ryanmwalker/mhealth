@@ -3,6 +3,7 @@ package com.example.mHealth;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -51,8 +53,8 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     CheckBox        sixWrapper;
     CheckBox        multWrapper;
     CheckBox        hispanicWrapper;
-    String sex = null;
-    RadioGroup sexGroup;
+    String gender = null;
+    RadioGroup genderGroup;
     Button loginButton;
 
 
@@ -62,9 +64,9 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
+        coordinatorLayout = Objects.requireNonNull(getActivity()).findViewById(R.id.coordinator_layout);
         View view = inflater.inflate(R.layout.fragment_new, container, false);
 
         //Set the nav drawer item highlight
@@ -133,9 +135,9 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     public void onClick(View v) {
         //Get input values
         long ts = currentTimeMillis()/1000;
-        String id = idWrapper.getEditText().getText().toString();
-        String subID = lastWrapper.getEditText().getText().toString() + ts;
-        String first = firstWrapper.getEditText().getText().toString();
+        String id = Objects.requireNonNull(idWrapper.getEditText()).getText().toString();
+        String subID = Objects.requireNonNull(lastWrapper.getEditText()).getText().toString() + ts;
+        String first = Objects.requireNonNull(firstWrapper.getEditText()).getText().toString();
         String last = lastWrapper.getEditText().getText().toString();
         String pain = String.valueOf(painWrapper.isChecked());
         String medication = String.valueOf(medWrapper.isChecked());
@@ -149,25 +151,25 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         String other = String.valueOf(otherWrapper.isChecked());
         String hispanic = String.valueOf(hispanicWrapper.isChecked());
         TextView sexLabel = mainActivity.findViewById(R.id.input_label_sex);
-        sexGroup = mainActivity.findViewById(R.id.input_sex);
+        genderGroup = mainActivity.findViewById(R.id.input_sex);
 
-        int sexID = sexGroup.getCheckedRadioButtonId();
+        int sexID = genderGroup.getCheckedRadioButtonId();
 
-        String height = feetWrapper.getEditText().getText().toString() + "'" + inchesWrapper.getEditText().getText().toString() + '"';
+        String height = Objects.requireNonNull(feetWrapper.getEditText()).getText().toString() + "'" + Objects.requireNonNull(inchesWrapper.getEditText()).getText().toString() + '"';
 
         if (height.equals("'" + '"')){
             height = null;
         }
 
 
-        String weight = poundsWrapper.getEditText().getText().toString();
+        String weight = Objects.requireNonNull(poundsWrapper.getEditText()).getText().toString();
 
         if (sexID != -1) {
-            View radioButton = sexGroup.findViewById(sexID);
-            int radioId = sexGroup.indexOfChild(radioButton);
-            RadioButton btn = (RadioButton) sexGroup.getChildAt(radioId);
-            sex = (String) btn.getText();
-            sexLabel.setTextColor(ContextCompat.getColor(getContext(), R.color.colorSecondaryText));
+            View radioButton = genderGroup.findViewById(sexID);
+            int radioId = genderGroup.indexOfChild(radioButton);
+            RadioButton btn = (RadioButton) genderGroup.getChildAt(radioId);
+            gender = (String) btn.getText();
+            sexLabel.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorSecondaryText));
         }
 
         //If all the validation passes, submit the form. Else, BOOLEANshow errors
@@ -192,7 +194,7 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
                         medication,
                         tbi,
                         walking,
-                        sex,
+                        gender,
                         sixmonth,
                         multiple,
                         asian,

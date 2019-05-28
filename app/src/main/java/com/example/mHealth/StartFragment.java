@@ -1,20 +1,15 @@
 package com.example.mHealth;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.SQLException;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.graphics.drawable.DrawerArrowDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,36 +23,35 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = "StartFragment";
 
+
     Button startButton;
     CoordinatorLayout coordinatorLayout;
-    DBHelper dbHelper;
+    DBHelper dbHelper;            //World coordinate system transformation - do in post processing instead
+
     TextView recordProgressMessage;
-    static MainActivity mainActivity;
-    static ProgressDialog stopDialog;
+    MainActivity mainActivity;
     ImageView mImageViewWalk;
     ImageView mImageViewCheck;
     AnimationDrawable walkAnimation;
-
-
-
     public StartFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
 
         View view = inflater.inflate(R.layout.fragment_start, container, false);
 
-        coordinatorLayout = (CoordinatorLayout) Objects.requireNonNull(getActivity()).findViewById(R.id.coordinator_layout);
+        coordinatorLayout = Objects.requireNonNull(getActivity()).findViewById(R.id.coordinator_layout);
 
         //Set the nav drawer item highlight
-        mainActivity = (MainActivity)getActivity();
+        mainActivity = (MainActivity) getActivity();
         mainActivity.navigationView.setCheckedItem(R.id.nav_start);
 
-        //DBHelper
+        //DBHelper    float[] results = new float[1];
+
         dbHelper = DBHelper.getInstance(getActivity());
 
         //Set actionbar title
@@ -72,8 +66,8 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         startButton.setOnClickListener(this);
 
         //Set button state depending on whether recording has been started and/or stopped
-        if(MainActivity.dataRecordStarted){
-            if(MainActivity.dataRecordCompleted){
+        if (MainActivity.dataRecordStarted) {
+            if (MainActivity.dataRecordCompleted) {
                 //started and completed: disable button completely
                 startButton.setEnabled(false);
                 startButton.setVisibility(View.GONE);
@@ -82,7 +76,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                 //started and not completed: enable STOP button
                 startButton.setEnabled(true);
                 startButton.setText(R.string.start_button_label_stop);
-                startButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.graphX));
+                startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.graphX));
             }
         } else {
             //Haven't started: enable START button
@@ -105,8 +99,8 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         mImageViewWalk.setVisibility(View.VISIBLE);
         walkAnimation.start();
 
-        if (!MainActivity.dataRecordStarted){
-            try{
+        if (!MainActivity.dataRecordStarted) {
+            try {
                 //Disable the drawer swipes while recording
                 mainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
@@ -114,20 +108,19 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                 recordProgressMessage.setText(R.string.start_recording_progress);
                 MainActivity.dataRecordStarted = true;
                 startButton.setText(R.string.start_button_label_stop);
-                startButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.graphX));
+                startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.graphX));
 
                 //Insert start time of recording
                 dbHelper.setStartTime(dbHelper.getTempSubInfo("subID"), System.currentTimeMillis());
 
                 //Start the service
                 Intent startService = new Intent(mainActivity, SensorService.class);
-                startService.putExtra("MESSENGER", new Messenger(messageHandler));
                 getContext().startService(startService);
 
                 Snackbar.make(coordinatorLayout, R.string.start_recording, Snackbar.LENGTH_SHORT).show();
 
-            } catch (SQLException e){
-                mainActivity.logger.e(getActivity(),TAG, "SQL error insertSubject()", e);
+            } catch (SQLException e) {
+                mainActivity.logger.e(getActivity(), TAG, "SQL error insertSubject()", e);
             }
         } else {
             MainActivity.dataRecordCompleted = true;
@@ -146,35 +139,6 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
             //Show snackbar message for recording complete
             Snackbar.make(coordinatorLayout, R.string.start_recording_complete, Snackbar.LENGTH_SHORT).show();//Change fragment to subject info screen. Do not add this fragment to the backstack
-        }
-    }
-
-    //Message handler for service
-    public static Handler messageHandler = new MessageHandler();
-
-    public static class MessageHandler extends Handler {
-        @Override
-        public void handleMessage(Message message) {
-            int state = message.arg1;
-            switch (state) {
-                case 0:
-                    //Dismiss dialog
-                    stopDialog.dismiss();
-                    Log.d(TAG, "Stop dialog dismissed");
-                    break;
-
-                case 1:
-                    //Show stop dialog
-                    stopDialog = new ProgressDialog(mainActivity);
-                    stopDialog.setTitle("Stopping sensors");
-                    stopDialog.setMessage("Please wait...");
-                    stopDialog.setProgressNumberFormat(null);
-                    stopDialog.setCancelable(false);
-                    stopDialog.setMax(100);
-                    stopDialog.show();
-                    Log.d(TAG, "Stop dialog displayed");
-                    break;
-            }
         }
     }
 }

@@ -17,43 +17,34 @@ import java.io.IOException;
 import au.com.bytecode.opencsv.CSVWriter;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final String TAG = "DBHelper";
-
-    SQLiteDatabase db;
-    CSVWriter csvWrite;
-    Cursor curCSV;
-    static Handler messageHandler;
-    private static DBHelper sInstance;
-
     //Constants for db name and version
-    public static final String DATABASE_NAME = "mHealth.db";
-    private static final int DATABASE_VERSION = 1;
-    public String databasePath = "";
-
+    static final String DATABASE_NAME = "mHealth.db";
+    private static final String TAG = "DBHelper";
     //Constants for identifying subject table and fields
-    public static final String SUBJECTS_TABLE_NAME = "subjects";
-    public static final String SUBJECTS_TABLE_NAME_TEMP = "subjects_temp";
-    public static final String SUBJECTS_ID = "id";
-    public static final String SUBJECTS_KEY = "subID";
-    public static final String SUBJECTS_FIRST_NAME = "first";
-    public static final String SUBJECTS_LAST_NAME = "last";
-    public static final String SUBJECTS_PAIN = "pain";
-    public static final String SUBJECTS_MEDICATION = "medication";
-    public static final String SUBJECTS_WALKING = "walking";
-    public static final String SUBJECTS_TBI = "tbi";
-    public static final String SUBJECTS_SEX = "sex";
-    public static final String SUBJECTS_MULTIPLE = "multiple_tbi";
-    public static final String SUBJECTS_MONTHS = "six_months";
-    public static final String SUBJECTS_ASIAN = "asian";
-    public static final String SUBJECTS_BLACK = "black";
-    public static final String SUBJECTS_WHITE = "white";
-    public static final String SUBJECTS_OTHER = "other";
-    public static final String SUBJECTS_HISPANIC = "hispanic";
-    public static final String SUBJECTS_WEIGHT = "weight";
-    public static final String SUBJECTS_HEIGHT = "height";
-    public static final String SUBJECTS_DATE = "date";
-    public static final String SUBJECTS_START_TIME = "starttime";
-    public static final String SUBJECTS_VALIDATION = "valid";
+    private static final String SUBJECTS_TABLE_NAME = "subjects";
+    private static final String SUBJECTS_TABLE_NAME_TEMP = "subjects_temp";
+    private static final String SUBJECTS_ID = "id";
+    private static final String SUBJECTS_KEY = "subID";
+    private static final int DATABASE_VERSION = 1;
+    private static final String SUBJECTS_FIRST_NAME = "first";
+    private static final String SUBJECTS_LAST_NAME = "last";
+    private static final String SUBJECTS_PAIN = "pain";
+    private static final String SUBJECTS_MEDICATION = "medication";
+    private static final String SUBJECTS_WALKING = "walking";
+    private static final String SUBJECTS_TBI = "tbi";
+    private static final String SUBJECTS_GENDER = "gender";
+    private static final String SUBJECTS_MULTIPLE = "multiple_tbi";
+    private static final String SUBJECTS_MONTHS = "six_months";
+    private static final String SUBJECTS_ASIAN = "asian";
+    private static final String SUBJECTS_BLACK = "black";
+    private static final String SUBJECTS_WHITE = "white";
+    private static final String SUBJECTS_OTHER = "other";
+    private static final String SUBJECTS_HISPANIC = "hispanic";
+    private static final String SUBJECTS_WEIGHT = "weight";
+    private static final String SUBJECTS_HEIGHT = "height";
+    private static final String SUBJECTS_DATE = "date";
+    private static final String SUBJECTS_START_TIME = "starttime";
+    private static final String SUBJECTS_VALIDATION = "valid";
     //Subject table structure
     private static final String SUBJECTS_TABLE_STRUCTURE = "(" +
                     SUBJECTS_ID + " TEXT, " +
@@ -67,7 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     SUBJECTS_TBI + " TEXT, " +
                     SUBJECTS_MONTHS + " TEXT, " +
                     SUBJECTS_MULTIPLE + " TEXT, " +
-                    SUBJECTS_SEX + " TEXT, " +
+            SUBJECTS_GENDER + " TEXT, " +
                     SUBJECTS_ASIAN + " TEXT, " +
                     SUBJECTS_BLACK + " TEXT, " +
                     SUBJECTS_WHITE + " TEXT, " +
@@ -78,6 +69,12 @@ public class DBHelper extends SQLiteOpenHelper {
                     SUBJECTS_START_TIME + " INTEGER, " +
                     SUBJECTS_VALIDATION + " TEXT " +
                     ")";
+    //Constants for identifying data table and fields
+    private static final String DATA_TABLE_NAME = "data";
+    private static final String DATA_TABLE_NAME_TEMP = "data_temp";
+    private static final String DATA_SUBJECT = "id";
+    private static final String DATA_TIME = "time";
+    private static final String DATA_ACCX = "accX";
 
     //SQL to create subject table
     private static final String SUBJECTS_TABLE_CREATE =
@@ -86,27 +83,25 @@ public class DBHelper extends SQLiteOpenHelper {
     //SQL to create TEMP subject table
     private static final String SUBJECTS_TABLE_CREATE_TEMP =
             "CREATE TEMP TABLE subjects_temp" + SUBJECTS_TABLE_STRUCTURE;
-
-    //Constants for identifying data table and fields
-    public static final String DATA_TABLE_NAME = "data";
-    public static final String DATA_TABLE_NAME_TEMP = "data_temp";
-    public static final String DATA_SUBJECT = "id";
-    public static final String DATA_TIME = "time";
-    public static final String DATA_ACCX = "accX";
-    public static final String DATA_ACCY = "accY";
-    public static final String DATA_ACCZ = "accZ";
-    public static final String DATA_GYROX = "gyroX";
-    public static final String DATA_GYROY = "gyroY";
-    public static final String DATA_GYROZ = "gyroZ";
-    public static final String DATA_ROT1 = "rot1";
-    public static final String DATA_ROT2 = "rot2";
-    public static final String DATA_ROT3 = "rot3";
-    public static final String DATA_ROT4 = "rot4";
-    public static final String DATA_ROT5 = "rot5";
-    public static final String DATA_ROT6 = "rot6";
-    public static final String DATA_ROT7 = "rot7";
-    public static final String DATA_ROT8 = "rot8";
-    public static final String DATA_ROT9 = "rot9";
+    private static final String DATA_ACCY = "accY";
+    private static final String DATA_ACCZ = "accZ";
+    private static final String DATA_GYROX = "gyroX";
+    private static final String DATA_GYROY = "gyroY";
+    private static final String DATA_GYROZ = "gyroZ";
+    private static final String DATA_ROT1 = "rot1";
+    private static final String DATA_ROT2 = "rot2";
+    private static final String DATA_ROT3 = "rot3";
+    private static final String DATA_ROT4 = "rot4";
+    private static final String DATA_ROT5 = "rot5";
+    private static final String DATA_ROT6 = "rot6";
+    private static final String DATA_ROT7 = "rot7";
+    private static final String DATA_ROT8 = "rot8";
+    private static final String DATA_ROT9 = "rot9";
+    private static DBHelper sInstance;
+    private static Handler messageHandler;
+    private SQLiteDatabase db;
+    private CSVWriter csvWrite;
+    private Cursor curCSV;
 
     //Data table structure
     private static final String DATA_TABLE_STRUCTURE =
@@ -139,6 +134,17 @@ public class DBHelper extends SQLiteOpenHelper {
             "CREATE TEMP TABLE " + DATA_TABLE_NAME_TEMP + DATA_TABLE_STRUCTURE;
 
     /**
+     * Constructor should be private to prevent direct instantiation.
+     * make call to static method "getInstance()" instead.
+     */
+    private DBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        String databasePath = context.getDatabasePath(DATABASE_NAME).getPath();
+        db = this.getWritableDatabase();
+    }
+
+    /**
      The static getInstance() method ensures that only one DatabaseHelper will ever exist at any given time.
      If the sInstance object has not been initialized, one will be created.
      If one has already been created then it will simply be returned.
@@ -146,7 +152,7 @@ public class DBHelper extends SQLiteOpenHelper {
      Instead, always use DatabaseHelper.getInstance(context), as it guarantees that only
      one database helper will exist across the entire application’s lifecycle.
      */
-    public static synchronized DBHelper getInstance(Context context) {
+    static synchronized DBHelper getInstance(Context context) {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
@@ -159,7 +165,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return sInstance;
     }
 
-    public static synchronized DBHelper getInstance(Context context, Handler handler) {
+    static synchronized DBHelper getInstance(Context context, Handler handler) {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
@@ -171,17 +177,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         messageHandler = handler;
         return sInstance;
-    }
-
-    /**
-     * Constructor should be private to prevent direct instantiation.
-     * make call to static method "getInstance()" instead.
-     */
-    private DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
-        databasePath = context.getDatabasePath(DATABASE_NAME).getPath();
-        db = this.getWritableDatabase();
     }
 
     @Override
@@ -211,7 +206,7 @@ public class DBHelper extends SQLiteOpenHelper {
         createTempTables(db);
     }
 
-    public void closeDB(){
+    void closeDB() {
         if (db != null){
             Log.d(TAG, "closeDB: closing db");
             db.close();
@@ -225,14 +220,14 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void createTempTables(SQLiteDatabase db){
+    private void createTempTables(SQLiteDatabase db) {
         Log.d(TAG, "Creating Temp tables");
         //Create temp tables
         db.execSQL(SUBJECTS_TABLE_CREATE_TEMP);
         db.execSQL(DATA_TABLE_CREATE_TEMP);
     }
 
-    public boolean checkSubjectExists(String subID) throws SQLException {
+    boolean checkSubjectExists(String subID) throws SQLException {
         //Check if subject exists in persistent subject table
         String query = "SELECT * FROM " + SUBJECTS_TABLE_NAME + " WHERE " + SUBJECTS_KEY + "=" + "'" + subID + "'";
 
@@ -243,7 +238,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    public boolean checkSubjectDataExists(String subID) throws SQLException {
+    boolean checkSubjectDataExists(String subID) throws SQLException {
         //Check if sensor data, for this subject, exists in the temp data table
         String query = "SELECT * FROM " + DATA_TABLE_NAME_TEMP + " WHERE " + DATA_SUBJECT + "=" + "'" + subID + "'";
 
@@ -254,10 +249,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    public void insertSubjectTemp(String id, String subID, String date, String first, String last, String pain,
-                                  String medication, String tbi, String walking, String sex, String six_months, String multiple_tbi,
-                                  String asian, String black, String white, String other,String hispanic, String weight,
-                                  String height, long time) throws SQLException {
+    void insertSubjectTemp(String id, String subID, String date, String first, String last, String pain,
+                           String medication, String tbi, String walking, String gender, String six_months, String multiple_tbi,
+                           String asian, String black, String white, String other, String hispanic, String weight,
+                           String height, long time) throws SQLException {
 
         ContentValues subjectData = new ContentValues();
         subjectData.put(SUBJECTS_ID, id);
@@ -269,7 +264,7 @@ public class DBHelper extends SQLiteOpenHelper {
         subjectData.put(SUBJECTS_MEDICATION, medication);
         subjectData.put(SUBJECTS_WALKING, walking);
         subjectData.put(SUBJECTS_TBI, tbi);
-        subjectData.put(SUBJECTS_SEX, sex);
+        subjectData.put(SUBJECTS_GENDER, gender);
         subjectData.put(SUBJECTS_MONTHS, six_months);
         subjectData.put(SUBJECTS_MULTIPLE, multiple_tbi);
         subjectData.put(SUBJECTS_ASIAN, asian);
@@ -284,13 +279,13 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert(SUBJECTS_TABLE_NAME_TEMP, null, subjectData);
     }
 
-    public void setStartTime(String subID, long time) throws SQLException {
+    void setStartTime(String subID, long time) throws SQLException {
         ContentValues cv = new ContentValues();
         cv.put(SUBJECTS_START_TIME, time);
         db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_KEY + " = " + "'" + subID + "'", null);
     }
 
-    public String getTempSubInfo(String type) throws SQLException {
+    String getTempSubInfo(String type) throws SQLException {
         String result = "";
 
         String query = "SELECT * FROM " + SUBJECTS_TABLE_NAME_TEMP;
@@ -326,8 +321,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 case "tbi":
                     result = c.getString(c.getColumnIndex(SUBJECTS_TBI));
                     break;
-                case "sex":
-                    result = c.getString(c.getColumnIndex(SUBJECTS_SEX));
+                case "gender":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_GENDER));
                     break;
                 case "six_months":
                     result = c.getString(c.getColumnIndex(SUBJECTS_MONTHS));
@@ -369,28 +364,28 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public void deleteSubjectTemp() throws SQLException {
+    void deleteSubjectTemp() throws SQLException {
         //Delete subject rows from temp subject and data tables. Table is not removed.
         db.delete(SUBJECTS_TABLE_NAME_TEMP, null, null);
         db.delete(DATA_TABLE_NAME_TEMP, null,null);
     }
 
-    public void validateSubject(String subID, Boolean validate) throws SQLException {
+    void validateSubject(String subID, Boolean validate) throws SQLException {
         ContentValues cv = new ContentValues();
         cv.put(SUBJECTS_VALIDATION, validate.toString());
         db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_KEY + " = " + "'" + subID + "'", null);
     }
 
-    public void resetSubjectData() throws SQLException {
+    void resetSubjectData() throws SQLException {
         //Delete subject rows from temp data tables. Table is not removed.
         db.delete(DATA_TABLE_NAME_TEMP, null,null);
         MainActivity.dataRecordStarted = false;
     }
 
-    public void insertDataTemp(String subID, long time,
-                              float[] acc,
-                              float[] gyro,
-                              float[] rot) throws SQLException {
+    void insertDataTemp(String subID, long time,
+                        float[] acc,
+                        float[] gyro,
+                        float[] rot) throws SQLException {
 
         ContentValues sensorValues = new ContentValues();
 
@@ -415,7 +410,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insertOrThrow(DATA_TABLE_NAME_TEMP, null, sensorValues);
     }
 
-    public void copyTempData() throws SQLException{
+    void copyTempData() throws SQLException {
         String copySubjectSQL = "INSERT INTO " + SUBJECTS_TABLE_NAME + " SELECT * FROM " + SUBJECTS_TABLE_NAME_TEMP;
         db.execSQL(copySubjectSQL);
 
@@ -423,7 +418,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(copyDataSQL);
     }
 
-    public void exportTrackingSheet(File outputFile) throws SQLException, IOException {
+    void exportTrackingSheet(File outputFile) throws SQLException, IOException {
 
         csvWrite = new CSVWriter(new FileWriter(outputFile));
 
@@ -433,7 +428,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         while (curCSV.moveToNext()) {
 
-            String arrStr[] = {curCSV.getString(0), curCSV.getString(1), curCSV.getString(2),
+            String[] arrStr = {curCSV.getString(0), curCSV.getString(1), curCSV.getString(2),
                     curCSV.getString(3), curCSV.getString(4), curCSV.getString(5),
                     curCSV.getString(6), curCSV.getString(7), curCSV.getString(8),
                     curCSV.getString(9), curCSV.getString(10), curCSV.getString(11),
@@ -448,7 +443,7 @@ public class DBHelper extends SQLiteOpenHelper {
         curCSV.close();
     }
 
-    public void exportSubjectData(File outputFile, String subID) throws IOException, SQLException {
+    void exportSubjectData(File outputFile, String subID) throws IOException, SQLException {
 
         csvWrite = new CSVWriter(new FileWriter(outputFile));
 
@@ -456,13 +451,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
         csvWrite.writeNext(curCSV.getColumnNames());
 
-        Integer writeCounter = 0;
+        int writeCounter = 0;
         Integer numRows = curCSV.getCount();
 
         while (curCSV.moveToNext()) {
             writeCounter++;
 
-            String arrStr[] = {curCSV.getString(0), curCSV.getString(1), curCSV.getString(2),
+            String[] arrStr = {curCSV.getString(0), curCSV.getString(1), curCSV.getString(2),
                     curCSV.getString(3), curCSV.getString(4), curCSV.getString(5),
                     curCSV.getString(6), curCSV.getString(7), curCSV.getString(8),
                     curCSV.getString(9), curCSV.getString(10), curCSV.getString(11),

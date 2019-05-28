@@ -1,18 +1,21 @@
 package com.example.mHealth;
 
 import android.Manifest;
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -24,12 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.io.File;
-import java.util.Objects;
-
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,18 +86,18 @@ public class MainActivity extends AppCompatActivity
         fragmentManager = getSupportFragmentManager();
 
         //Set the toolbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //Set navigation drawer
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         hamburger = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(hamburger);
         hamburger.syncState();
         hamburger.setDrawerIndicatorEnabled(false);
         //Disable menu items that should display when a user exists
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().findItem(R.id.nav_start).setEnabled(false).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_save).setEnabled(true);
@@ -118,15 +115,15 @@ public class MainActivity extends AppCompatActivity
         subCreated = false;
 
         //If any of the permission have not been granted, request
-        if (!hasPermission(PERMISSIONS[0]) || !hasPermission(PERMISSIONS[1]) ||
-                !hasPermission(PERMISSIONS[2])){
+        if (hasPermission(PERMISSIONS[0]) || hasPermission(PERMISSIONS[1]) ||
+                hasPermission(PERMISSIONS[2])) {
 
             ActivityCompat.requestPermissions(this, PERMISSIONS, 10);
         }
     }
 
     public boolean hasPermission(String permission){
-        return (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED);
+        return (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED);
     }
 
     @Override
@@ -176,9 +173,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -221,7 +217,8 @@ public class MainActivity extends AppCompatActivity
 
             //Check getFragments() == null to prevent the initial blank
             //fragment (before 'New' fragment is displayed) from being added to the backstack
-            if (fragmentManager.getFragments() == null || !addToBackStack) {
+            fragmentManager.getFragments();
+            if (!addToBackStack) {
                 fragmentTransaction.replace(R.id.fragment_container, fragment, fragment.getClass().getSimpleName())
                         .commit();
             } else {
