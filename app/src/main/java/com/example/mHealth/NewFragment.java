@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -65,7 +64,7 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_layout);
+        coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
         View view = inflater.inflate(R.layout.fragment_new, container, false);
 
         //Set the nav drawer item highlight
@@ -79,25 +78,25 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         dbHelper = DBHelper.getInstance(getActivity());
         //Get all text fields
 
-        idWrapper = (TextInputLayout) view.findViewById(R.id.input_id_wrapper);
-        firstWrapper = (TextInputLayout) view.findViewById(R.id.input_first_wrapper);
-        lastWrapper = (TextInputLayout) view.findViewById(R.id.input_last_wrapper);
-        painWrapper = (CheckBox) view.findViewById(R.id.input_pain_wrapper);
-        medWrapper = (CheckBox) view.findViewById(R.id.input_med_wrapper);
-        walkWrapper = (CheckBox) view.findViewById(R.id.input_walk_wrapper);
-        tbiWrapper = (CheckBox) view.findViewById(R.id.input_tbi_wrapper);
-        sixWrapper = (CheckBox) view.findViewById(R.id.input_sixmo_wrapper);
-        multWrapper = (CheckBox) view.findViewById(R.id.input_multiple_wrapper);
-        asianWrapper = (CheckBox) view.findViewById(R.id.input_asian_wrapper);
-        blackWrapper = (CheckBox) view.findViewById(R.id.input_black_wrapper);
-        whiteWrapper = (CheckBox) view.findViewById(R.id.input_white_wrapper);
-        hispanicWrapper = (CheckBox) view.findViewById(R.id.input_hispanic_wrapper);
-        otherWrapper = (CheckBox) view.findViewById(R.id.input_other_wrapper);
-        feetWrapper = (TextInputLayout) view.findViewById(R.id.input_feet_wrapper);
-        inchesWrapper = (TextInputLayout) view.findViewById(R.id.input_inches_wrapper);
-        poundsWrapper = (TextInputLayout) view.findViewById(R.id.input_pounds_wrapper);
+        idWrapper = view.findViewById(R.id.input_id_wrapper);
+        firstWrapper = view.findViewById(R.id.input_first_wrapper);
+        lastWrapper = view.findViewById(R.id.input_last_wrapper);
+        painWrapper = view.findViewById(R.id.input_pain_wrapper);
+        medWrapper = view.findViewById(R.id.input_med_wrapper);
+        walkWrapper = view.findViewById(R.id.input_walk_wrapper);
+        tbiWrapper = view.findViewById(R.id.input_tbi_wrapper);
+        sixWrapper = view.findViewById(R.id.input_sixmo_wrapper);
+        multWrapper = view.findViewById(R.id.input_multiple_wrapper);
+        asianWrapper = view.findViewById(R.id.input_asian_wrapper);
+        blackWrapper = view.findViewById(R.id.input_black_wrapper);
+        whiteWrapper = view.findViewById(R.id.input_white_wrapper);
+        hispanicWrapper = view.findViewById(R.id.input_hispanic_wrapper);
+        otherWrapper = view.findViewById(R.id.input_other_wrapper);
+        feetWrapper = view.findViewById(R.id.input_feet_wrapper);
+        inchesWrapper = view.findViewById(R.id.input_inches_wrapper);
+        poundsWrapper = view.findViewById(R.id.input_pounds_wrapper);
         //Listener for create button
-        loginButton = (Button) view.findViewById(R.id.input_submit);
+        loginButton = view.findViewById(R.id.input_submit);
         loginButton.setOnClickListener(this);
 
         //listener for tbi, prompts "if yes" questions
@@ -149,8 +148,8 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         String white = String.valueOf(whiteWrapper.isChecked());
         String other = String.valueOf(otherWrapper.isChecked());
         String hispanic = String.valueOf(hispanicWrapper.isChecked());
-        TextView sexLabel = (TextView) mainActivity.findViewById(R.id.input_label_sex);
-        sexGroup = (RadioGroup) mainActivity.findViewById(R.id.input_sex);
+        TextView sexLabel = mainActivity.findViewById(R.id.input_label_sex);
+        sexGroup = mainActivity.findViewById(R.id.input_sex);
 
         int sexID = sexGroup.getCheckedRadioButtonId();
 
@@ -191,11 +190,11 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
                         last,
                         pain,
                         medication,
-                        walking,
                         tbi,
+                        walking,
+                        sex,
                         sixmonth,
                         multiple,
-                        sex,
                         asian,
                         black,
                         white,
