@@ -128,11 +128,11 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mainActivity);
 
         if (subjectDataExists) {
-            alertDialogBuilder.setTitle("Save?");
-            alertDialogBuilder.setMessage("Are you sure you want to save data and start a new session? \n\nRecorded data will be saved to database.");
+            alertDialogBuilder.setTitle("Save");
+            alertDialogBuilder.setMessage("Save data and start a new session?");
         } else {
-            alertDialogBuilder.setTitle("Quit?");
-            alertDialogBuilder.setMessage("Are you sure you want to quit the current session? \n\nNo participant data from this session will be saved.");
+            alertDialogBuilder.setTitle("Quit");
+            alertDialogBuilder.setMessage("Quit current session? \nNo participant data will be saved from this session.");
         }
 
         switch(v.getId()){

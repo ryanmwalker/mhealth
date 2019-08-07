@@ -6,7 +6,7 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_new"
-                    android:icon="@android:drawable/ic_menu_add"
+                    android:icon="@drawable/ic_person_add_24dp"
                     android:title="@string/nav_new" />
                 <item
                     android:id="@+id/nav_start"
@@ -14,7 +14,7 @@
                     android:title="@string/nav_start"/>
                 <item
                     android:id="@+id/nav_save"
-                    android:icon="@android:drawable/ic_menu_save"
+                    android:icon="@drawable/ic_settings_black_24dp"
                     android:title="@string/nav_save" />
             </group>
         </menu>
@@ -25,19 +25,15 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_raw"
-                    android:icon="@android:drawable/ic_menu_manage"
+                    android:icon="@drawable/ic_info_outline_24dp"
                     android:title="@string/nav_raw" />
                 <item
                     android:id="@+id/nav_accelerometer"
-                    android:icon="@android:drawable/ic_menu_info_details"
+                    android:icon="@drawable/ic_timeline_grey_24dp"
                     android:title="@string/nav_accelerometer" />
                 <item
-                    android:id="@+id/nav_gravity"
-                    android:icon="@android:drawable/ic_menu_info_details"
-                    android:title="@string/nav_gravity" />
-                <item
                     android:id="@+id/nav_gyroscope"
-                    android:icon="@android:drawable/ic_menu_info_details"
+                    android:icon="@drawable/ic_timeline_grey_24dp"
                     android:title="@string/nav_gyroscope" />
             </group>
         </menu>

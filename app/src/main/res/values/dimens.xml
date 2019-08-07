@@ -1,7 +1,7 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">1dp</dimen>
-    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="nav_header_height">80dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
@@ -15,7 +15,6 @@
 
     <!-- New participant fragment -->
     <dimen name="new_layout_padding">30dp</dimen>
-
     <dimen name="new_form_element_height">60dp</dimen>
     <dimen name="new_input_width">200dp</dimen>
     <dimen name="new_input_height_spinner">70dp</dimen>

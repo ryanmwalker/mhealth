@@ -10,21 +10,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingRight="10dp">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="World"
-            android:id="@+id/worldCheckbox"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="center_horizontal" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Linear"
-            android:id="@+id/linearCheckbox"
-            android:layout_toStartOf="@id/worldCheckbox"
-            android:layout_gravity="center_horizontal" />
     </RelativeLayout>
 
     <View

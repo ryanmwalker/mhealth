@@ -1,5 +1,6 @@
 package com.example.mHealth;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -149,6 +150,7 @@ public class SensorService extends Service implements SensorEventListener {
         }
     }
 
+    @SuppressLint("InvalidWakeLockTag")
     @Override
     public void onCreate() {
         super.onCreate();

@@ -45,15 +45,74 @@
         android:layout_toRightOf="@id/subInfo_label_subID"
         android:gravity="center_vertical" />
 
+    <TextView
+        android:id="@+id/subInfo_label_first"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/subInfo_element_height"
+        android:layout_below="@id/subInfo_label_subID"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="@dimen/subInfo_label_margin_right"
+        android:gravity="center_vertical"
+        android:text="@string/subInfo_label_first"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/subInfo_value_first"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/subInfo_element_height"
+        android:layout_below="@id/subInfo_label_subID"
+        android:layout_toRightOf="@id/subInfo_label_first"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/subInfo_label_last"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/subInfo_element_height"
+        android:layout_below="@id/subInfo_label_first"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="@dimen/subInfo_label_margin_right"
+        android:gravity="center_vertical"
+        android:text="@string/subInfo_label_last"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/subInfo_value_last"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/subInfo_element_height"
+        android:layout_below="@id/subInfo_label_first"
+        android:layout_toRightOf="@id/subInfo_label_last"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/subInfo_label_gender"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/subInfo_element_height"
+        android:layout_below="@id/subInfo_label_last"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="@dimen/subInfo_label_margin_right"
+        android:gravity="center_vertical"
+        android:text="@string/subInfo_label_gender"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/subInfo_value_gender"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/subInfo_element_height"
+        android:layout_below="@id/subInfo_label_last"
+        android:layout_toRightOf="@id/subInfo_label_gender"
+        android:gravity="center" />
 
     <Button
         android:id="@+id/subInfo_button_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/subInfo_value_subID"
+        android:layout_below="@id/subInfo_value_gender"
+        android:background="@color/design_default_color_primary"
+        android:textColor="@color/colorWhite"
         android:text="@string/subInfo_label_delete_button" />
 
     <TextView

@@ -27,8 +27,8 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:background="@color/design_default_color_primary"
-            android:layout_below="@id/start_recording_progress"
             android:textColor="@color/colorWhite"
+            android:layout_below="@id/start_recording_progress"
             android:textSize="20sp"
             android:padding="8dp"
             android:text="@string/start_button_label_start" />

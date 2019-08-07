@@ -36,7 +36,7 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
 
         View view = inflater.inflate(R.layout.fragment_subject_info, container, false);
 
-        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_layout);
+        coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
 
         //Set the nav drawer item highlight
         mainActivity = (MainActivity) getActivity();
@@ -46,9 +46,9 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
         mainActivity.setTitle("Participant Information");
 
         //Listener for delete button
-        deleteButton = (Button) view.findViewById(R.id.subInfo_button_delete);
+        deleteButton = view.findViewById(R.id.subInfo_button_delete);
         deleteButton.setOnClickListener(this);
-        deleteMessage = (TextView) view.findViewById(R.id.subInfo_delete_message);
+        deleteMessage = view.findViewById(R.id.subInfo_delete_message);
 
         //Set state of delete button depending on whether recording is ongoing
         if(MainActivity.dataRecordStarted & !MainActivity.dataRecordCompleted){
@@ -65,10 +65,17 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
         //Get form text view elements
         TextView date = view.findViewById(R.id.subInfo_value_date);
         TextView subID = view.findViewById(R.id.subInfo_value_subID);
+        TextView first = view.findViewById(R.id.subInfo_value_first);
+        TextView last = view.findViewById(R.id.subInfo_value_last);
+        TextView gender = view.findViewById(R.id.subInfo_value_gender);
 
         //Set the text view elements in layout to subject info from temp table
         date.setText(dbHelper.getTempSubInfo("date"));
         subID.setText(dbHelper.getTempSubInfo("subID"));
+        first.setText(dbHelper.getTempSubInfo("first"));
+        last.setText(dbHelper.getTempSubInfo("last"));
+        gender.setText(dbHelper.getTempSubInfo("gender"));
+
 
         // Inflate the layout for this fragment
         return view;
@@ -77,14 +84,14 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mainActivity);
-        alertDialogBuilder.setTitle("Delete?");
-        alertDialogBuilder.setMessage("Are you sure you want to delete the current participant?\n\n This is irreversible.");
+        alertDialogBuilder.setTitle("Delete Participant");
+        alertDialogBuilder.setMessage("Delete current participant?\n\n This cannot be undone.");
 
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 //Deleting a lot of sensor data might take a while, so use a background thread
-                new DeleteSubjectTask().execute();
+                new DeleteParticipant().execute();
             }
         });
 
@@ -100,7 +107,7 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
     }
 
     //Async class for subject delete
-    public class DeleteSubjectTask extends AsyncTask<String, Integer, Boolean> {
+    public class DeleteParticipant extends AsyncTask<String, Integer, Boolean> {
 
         @Override
         protected void onPreExecute() {

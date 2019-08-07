@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.androidplot.xy.XYPlot;
@@ -29,8 +28,6 @@ public class AccelerometerFragment extends Fragment implements SensorEventListen
     TextView textViewXAxis;
     TextView textViewYAxis;
     TextView textViewZAxis;
-    CheckBox linearCheckbox;
-    CheckBox worldCheckbox;
 
     float[] accData;
     float[] gravData;
@@ -59,13 +56,9 @@ public class AccelerometerFragment extends Fragment implements SensorEventListen
         mainActivity.setTitle("Accelerometer");
 
         //Get text views
-        textViewXAxis = (TextView) view.findViewById(R.id.value_x_axis);
-        textViewYAxis = (TextView) view.findViewById(R.id.value_y_axis);
-        textViewZAxis = (TextView) view.findViewById(R.id.value_z_axis);
-
-        //Get checkboxes
-        linearCheckbox = (CheckBox) view.findViewById(R.id.linearCheckbox);
-        worldCheckbox = (CheckBox) view.findViewById(R.id.worldCheckbox);
+        textViewXAxis = view.findViewById(R.id.value_x_axis);
+        textViewYAxis = view.findViewById(R.id.value_y_axis);
+        textViewZAxis = view.findViewById(R.id.value_z_axis);
 
         //Sensor manager
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
@@ -79,7 +72,7 @@ public class AccelerometerFragment extends Fragment implements SensorEventListen
         magData = new float[3];
         plotData = new float[3];
 
-        plot = (XYPlot) view.findViewById(R.id.plot_sensor);
+        plot = view.findViewById(R.id.plot_sensor);
         dynamicPlot = new DynamicLinePlot(plot, getContext(), "Acceleration (m/s^2)");
         dynamicPlot.setMaxRange(18);
         dynamicPlot.setMinRange(-18);
@@ -140,39 +133,9 @@ public class AccelerometerFragment extends Fragment implements SensorEventListen
         //Safe not to implement
     }
 
-    private float[] calcLinearAcc(float[] accData, float[] gravData){
-        float[] data = new float[3];
-
-        data[0] = accData[0] - gravData[0];
-        data[1] = accData[1] - gravData[1];
-        data[2] = accData[2] - gravData[2];
-
-        return data;
-    }
-
-    private float[] calcWorldAcc(float[] accData, float[] magData, float[] gravData){
-        float[] data = new float[3];
-        float[] rotationMatrix = new float[9];
-
-        SensorManager.getRotationMatrix(rotationMatrix, null, gravData, magData);
-
-        data[0] = rotationMatrix[0] * accData[0] + rotationMatrix[1] * accData[1] + rotationMatrix[2] * accData[2];
-        data[1] = rotationMatrix[3] * accData[0] + rotationMatrix[4] * accData[1] + rotationMatrix[5] * accData[2];
-        data[2] = rotationMatrix[6] * accData[0] + rotationMatrix[7] * accData[1] + rotationMatrix[8] * accData[2];
-
-        return data;
-    }
 
     private void plotData(){
-        if(linearCheckbox.isChecked() & worldCheckbox.isChecked()){
-            plotData = calcWorldAcc(calcLinearAcc(accData, gravData), magData, gravData);
-        } else if(linearCheckbox.isChecked()){
-            plotData = calcLinearAcc(accData, gravData);
-        } else if(worldCheckbox.isChecked()){
-            plotData = calcWorldAcc(accData, magData, gravData);
-        } else {
-            plotData = accData;
-        }
+        plotData = accData;
 
         dynamicPlot.setData(plotData[0], 0);
         dynamicPlot.setData(plotData[1], 1);

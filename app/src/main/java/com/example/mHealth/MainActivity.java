@@ -199,9 +199,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_accelerometer:
                 addFragment(new AccelerometerFragment(), true);
                 break;
-            case R.id.nav_gravity:
-                addFragment(new GravityFragment(), true);
-                break;
             case R.id.nav_gyroscope:
                 addFragment(new GyroscopeFragment(), true);
                 break;

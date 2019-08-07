@@ -27,9 +27,6 @@ public class RawFragment extends Fragment implements SensorEventListener {
     TextView accX;
     TextView accY;
     TextView accZ;
-    TextView accWorldX;
-    TextView accWorldY;
-    TextView accWorldZ;
     TextView gyroX;
     TextView gyroY;
     TextView gyroZ;
@@ -65,7 +62,7 @@ public class RawFragment extends Fragment implements SensorEventListener {
         mainActivity.navigationView.setCheckedItem(R.id.nav_raw);
 
         //Set actionbar title
-        mainActivity.setTitle("Raw Data");
+        mainActivity.setTitle("Sensor Metrics");
 
         //Sensor manager
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
@@ -75,24 +72,21 @@ public class RawFragment extends Fragment implements SensorEventListener {
         magnetic = sensorManager.getDefaultSensor(MainActivity.TYPE_MAGNETIC);
 
         //Get text fields
-        accX = (TextView) view.findViewById(R.id.raw_value_acc_x);
-        accY = (TextView) view.findViewById(R.id.raw_value_acc_y);
-        accZ = (TextView) view.findViewById(R.id.raw_value_acc_z);
-        accWorldX = (TextView) view.findViewById(R.id.raw_value_acc_world_x);
-        accWorldY = (TextView) view.findViewById(R.id.raw_value_acc_world_y);
-        accWorldZ = (TextView) view.findViewById(R.id.raw_value_acc_world_z);
-        gyroX = (TextView) view.findViewById(R.id.raw_value_gyro_x);
-        gyroY = (TextView) view.findViewById(R.id.raw_value_gyro_y);
-        gyroZ = (TextView) view.findViewById(R.id.raw_value_gyro_z);
-        rot1 = (TextView) view.findViewById(R.id.raw_value_rot_1);
-        rot2 = (TextView) view.findViewById(R.id.raw_value_rot_2);
-        rot3 = (TextView) view.findViewById(R.id.raw_value_rot_3);
-        rot4 = (TextView) view.findViewById(R.id.raw_value_rot_4);
-        rot5 = (TextView) view.findViewById(R.id.raw_value_rot_5);
-        rot6 = (TextView) view.findViewById(R.id.raw_value_rot_6);
-        rot7 = (TextView) view.findViewById(R.id.raw_value_rot_7);
-        rot8 = (TextView) view.findViewById(R.id.raw_value_rot_8);
-        rot9 = (TextView) view.findViewById(R.id.raw_value_rot_9);
+        accX = view.findViewById(R.id.raw_value_acc_x);
+        accY = view.findViewById(R.id.raw_value_acc_y);
+        accZ = view.findViewById(R.id.raw_value_acc_z);
+        gyroX = view.findViewById(R.id.raw_value_gyro_x);
+        gyroY = view.findViewById(R.id.raw_value_gyro_y);
+        gyroZ = view.findViewById(R.id.raw_value_gyro_z);
+        rot1 = view.findViewById(R.id.raw_value_rot_1);
+        rot2 = view.findViewById(R.id.raw_value_rot_2);
+        rot3 = view.findViewById(R.id.raw_value_rot_3);
+        rot4 = view.findViewById(R.id.raw_value_rot_4);
+        rot5 = view.findViewById(R.id.raw_value_rot_5);
+        rot6 = view.findViewById(R.id.raw_value_rot_6);
+        rot7 = view.findViewById(R.id.raw_value_rot_7);
+        rot8 = view.findViewById(R.id.raw_value_rot_8);
+        rot9 = view.findViewById(R.id.raw_value_rot_9);
 
         return view;
     }
@@ -143,9 +137,6 @@ public class RawFragment extends Fragment implements SensorEventListener {
             accX.setText(String.format("%.2f", accelerometerMatrix[0]));
             accY.setText(String.format("%.2f", accelerometerMatrix[1]));
             accZ.setText(String.format("%.2f", accelerometerMatrix[2]));
-            accWorldX.setText(String.format("%.2f", accelerometerWorldMatrix[0]));
-            accWorldY.setText(String.format("%.2f", accelerometerWorldMatrix[1]));
-            accWorldZ.setText(String.format("%.2f", accelerometerWorldMatrix[2]));
             gyroX.setText(String.format("%.2f", gyroscopeMatrix[0]));
             gyroY.setText(String.format("%.2f", gyroscopeMatrix[1]));
             gyroZ.setText(String.format("%.2f", gyroscopeMatrix[2]));

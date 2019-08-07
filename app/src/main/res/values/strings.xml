@@ -18,7 +18,7 @@
     <string name="nav_new">New</string>
     <string name="nav_start">Start</string>
     <string name="nav_save">Admin</string>
-    <string name="nav_raw">Raw Data</string>
+    <string name="nav_raw">Metrics</string>
     <string name="nav_accelerometer">Accelerometer</string>
     <string name="nav_gravity">Gravity</string>
     <string name="nav_gyroscope">Gyroscope</string>
@@ -55,8 +55,10 @@
     <!-- Subject info fragment -->
     <string name="subInfo_label_date">Date:</string>
     <string name="subInfo_label_subNum">Participant ID:</string>
-    <string name="subInfo_label_sex">Gender:</string>
-    <string name="subInfo_label_delete_button">Delete participant</string>
+    <string name="subInfo_label_first">First Name:</string>
+    <string name="subInfo_label_last">Last Name:</string>
+    <string name="subInfo_label_gender">Gender:</string>
+    <string name="subInfo_label_delete_button">Delete</string>
     <string name="subInfo_message_recording">(Cannot delete while recording data)</string>
 
     <!-- Start fragment -->
