@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Participant">
+    <item android:title="@string/participant">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_new"
-                    android:icon="@drawable/ic_person_add_24dp"
+                    android:icon="@drawable/ic_person_24dp"
                     android:title="@string/nav_new" />
                 <item
                     android:id="@+id/nav_start"
@@ -20,7 +20,7 @@
         </menu>
     </item>
 
-    <item android:title="Sensors">
+    <item android:title="@string/sensors">
         <menu>
             <group android:checkableBehavior="single">
                 <item

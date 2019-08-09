@@ -15,7 +15,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="nav_new">New</string>
+    <string name="nav_new">Add Participant</string>
     <string name="nav_start">Start</string>
     <string name="nav_save">Admin</string>
     <string name="nav_raw">Metrics</string>
@@ -32,11 +32,11 @@
     <string name="input_text_tbi">Ever had a concussion</string>
     <string name="input_text_sixmo">If yes, within the last six months?</string>
     <string name="input_text_multiple">If yes, more than once?</string>
-    <string name="input_text_sex">Gender:</string>
+    <string name="input_text_gender">Gender:</string>
     <string name="input_text_race">Race/Ethnicity:</string>
-    <string name="new_sex_male_label">Male</string>
-    <string name="new_sex_female_label">Female</string>
-    <string name="new_sex_other_label">Other</string>
+    <string name="new_gender_male_label">Male</string>
+    <string name="new_gender_female_label">Female</string>
+    <string name="new_gender_other_label">Other</string>
     <string name="ethnicity_hispanic_label">Hispanic/Latino</string>
     <string name="race_white_label">White</string>
     <string name="race_black_label">Black</string>
@@ -64,8 +64,10 @@
     <!-- Start fragment -->
     <string name="start_button_label_start">Start</string>
     <string name="start_button_label_stop">Stop</string>
-    <string name="start_recording_complete">Recording complete.</string>
+    <string name="start_button_label_resume">Resume</string>
+    <string name="start_recording_complete">Recording complete? Return device to administrator. Otherwise select resume. </string>
     <string name="start_recording">Begin walking.</string>
+    <string name="start_recording_resume">Continue walking?</string>
     <string name="start_recording_progress">Recording in progress...</string>
     <string name="start_recording_ready">Ready to walk?</string>
 
@@ -83,5 +85,17 @@
     <string name="device_gyroscope_label">Gyroscope:</string>
     <string name="device_gravity_label">Gravity:</string>
     <string name="device_magnetometer_label">Magnetometer:</string>
+    <string name="walking_progress">walking_progress</string>
+    <string name="participant">Participant</string>
+    <string name="sensors">Sensors</string>
+    <string name="id">ID</string>
+    <string name="first">First</string>
+    <string name="last">Last</string>
+    <string name="ft">ft</string>
+    <string name="feet">\'</string>
+    <string name="in">in</string>
+    <string name="inches">\'\'</string>
+    <string name="_0">0</string>
+    <string name="lbs">lbs</string>
 
 </resources>

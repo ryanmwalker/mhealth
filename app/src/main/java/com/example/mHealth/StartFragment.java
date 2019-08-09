@@ -33,6 +33,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     ImageView mImageViewWalk;
     ImageView mImageViewCheck;
     AnimationDrawable walkAnimation;
+
     public StartFragment() {
         // Required empty public constructor
     }
@@ -66,23 +67,22 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         startButton.setOnClickListener(this);
 
         //Set button state depending on whether recording has been started and/or stopped
-        if (MainActivity.dataRecordStarted) {
-            if (MainActivity.dataRecordCompleted) {
-                //started and completed: disable button completely
-                startButton.setEnabled(false);
-                startButton.setVisibility(View.GONE);
-                recordProgressMessage.setText(R.string.start_recording_complete);
+        if (MainActivity.dataRecordStart) {
+            if (MainActivity.dataRecordPaused && !MainActivity.dataRecordComplete) {
+                startButton.setEnabled(true);
+                startButton.setText(R.string.start_button_label_resume);
+                startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.green));
             } else {
                 //started and not completed: enable STOP button
                 startButton.setEnabled(true);
                 startButton.setText(R.string.start_button_label_stop);
-                startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.graphX));
+                startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.red));
             }
         } else {
             //Haven't started: enable START button
             startButton.setEnabled(true);
             startButton.setText(R.string.start_button_label_start);
-            startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.graphY));
+            startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.green));
         }
 
         mImageViewWalk = view.findViewById(R.id.walk);
@@ -99,16 +99,17 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         mImageViewWalk.setVisibility(View.VISIBLE);
         walkAnimation.start();
 
-        if (!MainActivity.dataRecordStarted) {
+        if (!MainActivity.dataRecordStart) {
             try {
                 //Disable the drawer swipes while recording
                 mainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
                 //Set recording progress message
                 recordProgressMessage.setText(R.string.start_recording_progress);
-                MainActivity.dataRecordStarted = true;
+                MainActivity.dataRecordStart = true;
+                MainActivity.dataRecordPaused = false;
                 startButton.setText(R.string.start_button_label_stop);
-                startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.graphX));
+                startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.red));
 
                 //Insert start time of recording
                 dbHelper.setStartTime(dbHelper.getTempSubInfo("subID"), System.currentTimeMillis());
@@ -122,23 +123,27 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             } catch (SQLException e) {
                 mainActivity.logger.e(getActivity(), TAG, "SQL error insertSubject()", e);
             }
-        } else {
-            MainActivity.dataRecordCompleted = true;
+        } else if (!MainActivity.dataRecordPaused) {
+            //Re-enable swipes after recording
+            mainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+            //Set recording progress message
+            recordProgressMessage.setText(R.string.start_recording_resume);
+            MainActivity.dataRecordPaused = true;
+            MainActivity.dataRecordStart = false;
+            startButton.setText(R.string.start_button_label_resume);
+            startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.green));
             walkAnimation.stop();
             mImageViewWalk.setVisibility(View.INVISIBLE);
-            mImageViewCheck.setVisibility(View.VISIBLE);
-            startButton.setEnabled(false);
-            startButton.setVisibility(View.GONE);
-            recordProgressMessage.setText(R.string.start_recording_complete);
 
-            //Stop the service
-            mainActivity.stopService(new Intent(mainActivity, SensorService.class));
+            //Insert pause or stop time of recording
+            dbHelper.setStopTime(dbHelper.getTempSubInfo("subID"), System.currentTimeMillis());
 
-            //Re-enable the hamburger, and swipes, after recording
-            mainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
             //Show snackbar message for recording complete
             Snackbar.make(coordinatorLayout, R.string.start_recording_complete, Snackbar.LENGTH_SHORT).show();//Change fragment to subject info screen. Do not add this fragment to the backstack
+        } else {
+
         }
     }
 }

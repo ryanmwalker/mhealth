@@ -76,9 +76,9 @@ public class AccelerometerFragment extends Fragment implements SensorEventListen
         dynamicPlot = new DynamicLinePlot(plot, getContext(), "Acceleration (m/s^2)");
         dynamicPlot.setMaxRange(18);
         dynamicPlot.setMinRange(-18);
-        dynamicPlot.addSeriesPlot("X", 0, ContextCompat.getColor(getContext(), R.color.graphX));
-        dynamicPlot.addSeriesPlot("Y", 1, ContextCompat.getColor(getContext(), R.color.graphY));
-        dynamicPlot.addSeriesPlot("Z", 2, ContextCompat.getColor(getContext(), R.color.graphZ));
+        dynamicPlot.addSeriesPlot("X", 0, ContextCompat.getColor(getContext(), R.color.red));
+        dynamicPlot.addSeriesPlot("Y", 1, ContextCompat.getColor(getContext(), R.color.green));
+        dynamicPlot.addSeriesPlot("Z", 2, ContextCompat.getColor(getContext(), R.color.blue));
 
         //Handler for graph plotting on background thread
         handler = new Handler();

@@ -43,7 +43,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String SUBJECTS_WEIGHT = "weight";
     private static final String SUBJECTS_HEIGHT = "height";
     private static final String SUBJECTS_DATE = "date";
-    private static final String SUBJECTS_START_TIME = "starttime";
+    private static final String SUBJECTS_START_TIME = "start_time";
+    private static final String SUBJECTS_STOP_TIME = "stop_time";
     private static final String SUBJECTS_VALIDATION = "valid";
     //Subject table structure
     private static final String SUBJECTS_TABLE_STRUCTURE = "(" +
@@ -67,6 +68,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     SUBJECTS_WEIGHT + " TEXT, " +
                     SUBJECTS_HEIGHT + " TEXT, " +
                     SUBJECTS_START_TIME + " INTEGER, " +
+            SUBJECTS_STOP_TIME + " INTEGER, " +
                     SUBJECTS_VALIDATION + " TEXT " +
                     ")";
     //Constants for identifying data table and fields
@@ -252,7 +254,7 @@ public class DBHelper extends SQLiteOpenHelper {
     void insertSubjectTemp(String id, String subID, String date, String first, String last, String pain,
                            String medication, String tbi, String walking, String gender, String six_months, String multiple_tbi,
                            String asian, String black, String white, String other, String hispanic, String weight,
-                           String height, long time) throws SQLException {
+                           String height, long start_time, long stop_time) throws SQLException {
 
         ContentValues subjectData = new ContentValues();
         subjectData.put(SUBJECTS_ID, id);
@@ -274,14 +276,29 @@ public class DBHelper extends SQLiteOpenHelper {
         subjectData.put(SUBJECTS_HISPANIC, hispanic);
         subjectData.put(SUBJECTS_WEIGHT, weight);
         subjectData.put(SUBJECTS_HEIGHT, height);
-        subjectData.put(SUBJECTS_START_TIME, time);
+        subjectData.put(SUBJECTS_START_TIME, start_time);
+        subjectData.put(SUBJECTS_STOP_TIME, stop_time);
         subjectData.put(SUBJECTS_VALIDATION, "TRUE");
         db.insert(SUBJECTS_TABLE_NAME_TEMP, null, subjectData);
     }
 
     void setStartTime(String subID, long time) throws SQLException {
         ContentValues cv = new ContentValues();
-        cv.put(SUBJECTS_START_TIME, time);
+        if (getTempSubInfo("start_time").equals("0")) {
+            cv.put(SUBJECTS_START_TIME, time);
+        } else {
+            cv.put(SUBJECTS_START_TIME, getTempSubInfo("start_time") + " " + time);
+        }
+        db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_KEY + " = " + "'" + subID + "'", null);
+    }
+
+    void setStopTime(String subID, long time) throws SQLException {
+        ContentValues cv = new ContentValues();
+        if (getTempSubInfo("stop_time").equals("0")) {
+            cv.put(SUBJECTS_STOP_TIME, time);
+        } else {
+            cv.put(SUBJECTS_STOP_TIME, getTempSubInfo("stop_time") + " " + time);
+        }
         db.update(SUBJECTS_TABLE_NAME_TEMP, cv, SUBJECTS_KEY + " = " + "'" + subID + "'", null);
     }
 
@@ -351,8 +368,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 case "height":
                     result = c.getString(c.getColumnIndex(SUBJECTS_HEIGHT));
                     break;
-                case "time":
+                case "start_time":
                     result = c.getString(c.getColumnIndex(SUBJECTS_START_TIME));
+                    break;
+                case "stop_time":
+                    result = c.getString(c.getColumnIndex(SUBJECTS_STOP_TIME));
                     break;
                 case "valid":
                     result = c.getString(c.getColumnIndex(SUBJECTS_VALIDATION));
@@ -379,7 +399,8 @@ public class DBHelper extends SQLiteOpenHelper {
     void resetSubjectData() throws SQLException {
         //Delete subject rows from temp data tables. Table is not removed.
         db.delete(DATA_TABLE_NAME_TEMP, null,null);
-        MainActivity.dataRecordStarted = false;
+        MainActivity.dataRecordStart = false;
+        MainActivity.dataRecordPaused = false;
     }
 
     void insertDataTemp(String subID, long time,
@@ -434,7 +455,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     curCSV.getString(9), curCSV.getString(10), curCSV.getString(11),
                     curCSV.getString(12), curCSV.getString(13), curCSV.getString(14),
                     curCSV.getString(15), curCSV.getString(16), curCSV.getString(17),
-                    curCSV.getString(18), curCSV.getString(19), curCSV.getString(20)};
+                    curCSV.getString(18), curCSV.getString(19), curCSV.getString(20), curCSV.getString(21)};
 
             csvWrite.writeNext(arrStr);
         }

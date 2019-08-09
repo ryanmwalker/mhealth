@@ -51,7 +51,7 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
         deleteMessage = view.findViewById(R.id.subInfo_delete_message);
 
         //Set state of delete button depending on whether recording is ongoing
-        if(MainActivity.dataRecordStarted & !MainActivity.dataRecordCompleted){
+        if (MainActivity.dataRecordStart & !MainActivity.dataRecordComplete) {
             deleteButton.setEnabled(false);
             deleteMessage.setText(R.string.subInfo_message_recording);
         } else {

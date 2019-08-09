@@ -72,7 +72,6 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         //Set the nav drawer item highlight
         mainActivity = (MainActivity) getActivity();
         mainActivity.navigationView.setCheckedItem(R.id.nav_new);
-
         //Set actionbar title
         mainActivity.setTitle("New Participant");
 
@@ -150,8 +149,8 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
         String white = String.valueOf(whiteWrapper.isChecked());
         String other = String.valueOf(otherWrapper.isChecked());
         String hispanic = String.valueOf(hispanicWrapper.isChecked());
-        TextView sexLabel = mainActivity.findViewById(R.id.input_label_sex);
-        genderGroup = mainActivity.findViewById(R.id.input_sex);
+        TextView sexLabel = mainActivity.findViewById(R.id.input_label_gender);
+        genderGroup = mainActivity.findViewById(R.id.input_gender);
 
         int sexID = genderGroup.getCheckedRadioButtonId();
 
@@ -204,6 +203,7 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
                         hispanic,
                         weight,
                         height,
+                        0,
                         0
                 );
 
@@ -215,11 +215,13 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
                 mainActivity.navigationView.getMenu().findItem(R.id.nav_save).setEnabled(true);
                 mainActivity.navigationView.getMenu().findItem(R.id.nav_new).setTitle("Participant Info");
 
+
                 Snackbar.make(coordinatorLayout, "Participant created", Snackbar.LENGTH_SHORT).show();
                 mainActivity.logger.i(getActivity(),TAG, "Participant #" + subID + " created");
 
                 //Change fragment to subject info screen. Do not add this fragment to the backstack
                 mainActivity.addFragment(new StartFragment(), false);
+                mainActivity.navigationView.getMenu().findItem(R.id.nav_new).setIcon(R.drawable.ic_person_24dp);
             } else {
                 //subject exists. Set focus on subject number field
                 Snackbar.make(coordinatorLayout,"Participant already exists...", Snackbar.LENGTH_SHORT).show();

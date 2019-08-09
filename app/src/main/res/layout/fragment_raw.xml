@@ -20,7 +20,7 @@
         android:layout_below="@+id/raw_label_acc"
         android:paddingRight="@dimen/raw_axes_right_pad"
         android:text="X:"
-        android:textColor="@color/graphX" />
+        android:textColor="@color/red" />
 
     <TextView
         android:id="@+id/raw_label_acc_y"
@@ -29,7 +29,7 @@
         android:layout_below="@+id/raw_label_acc_x"
         android:paddingRight="@dimen/raw_axes_right_pad"
         android:text="Y:"
-        android:textColor="@color/graphY" />
+        android:textColor="@color/green" />
 
     <TextView
         android:id="@+id/raw_label_acc_z"
@@ -38,7 +38,7 @@
         android:layout_below="@+id/raw_label_acc_y"
         android:paddingRight="@dimen/raw_axes_right_pad"
         android:text="Z:"
-        android:textColor="@color/graphZ" />
+        android:textColor="@color/blue" />
 
     <TextView
         android:id="@+id/raw_value_acc_x"
@@ -47,7 +47,7 @@
         android:layout_alignBaseline="@+id/raw_label_acc_x"
         android:layout_alignBottom="@+id/raw_label_acc_x"
         android:layout_toEndOf="@+id/raw_label_acc_x"
-        android:textColor="@color/graphX" />
+        android:textColor="@color/red" />
 
     <TextView
         android:id="@+id/raw_value_acc_y"
@@ -56,7 +56,7 @@
         android:layout_alignBaseline="@+id/raw_label_acc_y"
         android:layout_alignBottom="@+id/raw_label_acc_y"
         android:layout_toEndOf="@+id/raw_label_acc_y"
-        android:textColor="@color/graphY" />
+        android:textColor="@color/green" />
 
     <TextView
         android:id="@+id/raw_value_acc_z"
@@ -65,7 +65,7 @@
         android:layout_alignBaseline="@+id/raw_label_acc_z"
         android:layout_alignBottom="@+id/raw_label_acc_z"
         android:layout_toEndOf="@+id/raw_label_acc_z"
-        android:textColor="@color/graphZ" />
+        android:textColor="@color/blue" />
 
     <Space
         android:id="@+id/raw_acc_spacer"
@@ -89,7 +89,7 @@
         android:layout_below="@+id/raw_label_gyro"
         android:paddingRight="@dimen/raw_axes_right_pad"
         android:text="X:"
-        android:textColor="@color/graphX" />
+        android:textColor="@color/red" />
 
     <TextView
         android:id="@+id/raw_label_gyro_y"
@@ -98,7 +98,7 @@
         android:layout_below="@+id/raw_label_gyro_x"
         android:paddingRight="@dimen/raw_axes_right_pad"
         android:text="Y:"
-        android:textColor="@color/graphY" />
+        android:textColor="@color/green" />
 
     <TextView
         android:id="@+id/raw_label_gyro_z"
@@ -107,7 +107,7 @@
         android:layout_below="@+id/raw_label_gyro_y"
         android:paddingRight="@dimen/raw_axes_right_pad"
         android:text="Z:"
-        android:textColor="@color/graphZ" />
+        android:textColor="@color/blue" />
 
     <TextView
         android:id="@+id/raw_value_gyro_x"
@@ -116,7 +116,7 @@
         android:layout_alignBaseline="@+id/raw_label_gyro_x"
         android:layout_alignBottom="@+id/raw_label_gyro_x"
         android:layout_toEndOf="@+id/raw_label_gyro_x"
-        android:textColor="@color/graphX" />
+        android:textColor="@color/red" />
 
     <TextView
         android:id="@+id/raw_value_gyro_y"
@@ -125,7 +125,7 @@
         android:layout_alignBaseline="@+id/raw_label_gyro_y"
         android:layout_alignBottom="@+id/raw_label_gyro_y"
         android:layout_toEndOf="@+id/raw_label_gyro_y"
-        android:textColor="@color/graphY" />
+        android:textColor="@color/green" />
 
     <TextView
         android:id="@+id/raw_value_gyro_z"
@@ -134,7 +134,7 @@
         android:layout_alignBaseline="@+id/raw_label_gyro_z"
         android:layout_alignBottom="@+id/raw_label_gyro_z"
         android:layout_toEndOf="@+id/raw_label_gyro_z"
-        android:textColor="@color/graphZ" />
+        android:textColor="@color/blue" />
 
     <Space
         android:id="@+id/raw_gyro_spacer"

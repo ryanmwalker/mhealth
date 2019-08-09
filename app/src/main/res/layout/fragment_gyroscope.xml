@@ -83,7 +83,7 @@
                             android:fontFamily="sans-serif-condensed"
                             android:text="X: "
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/graphX" />
+                            android:textColor="@color/red" />
 
                         <TextView
                             android:id="@+id/value_x_axis"
@@ -109,7 +109,7 @@
                             android:fontFamily="sans-serif-condensed"
                             android:text="Y: "
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/graphY" />
+                            android:textColor="@color/green" />
 
                         <TextView
                             android:id="@+id/value_y_axis"
@@ -136,7 +136,7 @@
                             android:fontFamily="sans-serif-condensed"
                             android:text="Z: "
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/graphZ" />
+                            android:textColor="@color/blue" />
 
                         <TextView
                             android:id="@+id/value_z_axis"

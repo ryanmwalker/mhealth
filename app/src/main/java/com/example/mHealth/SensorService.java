@@ -1,7 +1,6 @@
 package com.example.mHealth;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,15 +11,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.os.Process;
-import android.os.RemoteException;
 import android.util.Log;
 
 import java.util.concurrent.ExecutorService;
@@ -99,11 +95,6 @@ public class SensorService extends Service implements SensorEventListener {
                 message.arg1 = 1;
                 break;
         }
-        try {
-            messageHandler.send(message);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -181,13 +172,8 @@ public class SensorService extends Service implements SensorEventListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        startForeground(Process.myPid(), new Notification());
         registerListener();
-        wakeLock.acquire();
-
-        //Message handler for progress dialog
-        Bundle extras = intent.getExtras();
-        messageHandler = (Messenger) extras.get("MESSENGER");
+        wakeLock.acquire(10 * 60 * 1000L /*10 minutes*/);
 
         return START_STICKY;
     }

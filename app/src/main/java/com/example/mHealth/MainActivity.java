@@ -44,8 +44,10 @@ public class MainActivity extends AppCompatActivity
     public Logger logger;
 
     //App flags
-    public static Boolean dataRecordStarted;
-    public static Boolean dataRecordCompleted;
+    public static Boolean dataRecordStart;
+    public static Boolean dataRecordStop;
+    public static Boolean dataRecordComplete = false;
+    public static Boolean dataRecordPaused = false;
     public static Boolean subCreated;
 
     //Set sensors used in app
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().findItem(R.id.nav_start).setEnabled(false).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_save).setEnabled(true);
-
+        navigationView.getMenu().findItem(R.id.nav_new).setIcon(R.drawable.ic_person_add_24dp);
         //First fragment is blank. So set initial fragment to 'new' instead
         addFragment(new NewFragment(), true);
         toolbar.setTitle("New Participant");
@@ -110,8 +112,11 @@ public class MainActivity extends AppCompatActivity
         dbHelper = DBHelper.getInstance(this);
 
         //Set app flags on create/recreate
-        dataRecordStarted = false;
-        dataRecordCompleted = false;
+        dataRecordStart = false;
+        dataRecordStop = false;
+        dataRecordComplete = false;
+        dataRecordPaused = false;
+
         subCreated = false;
 
         //If any of the permission have not been granted, request
@@ -223,15 +228,6 @@ public class MainActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .commit();
             }
-        }
-    }
-
-    public String getSensorAvailable(short sensor_type){
-        Sensor curSensor = mSensorManager.getDefaultSensor(sensor_type);
-        if (curSensor != null){
-            return("Yes  " + "(" + curSensor.getVendor() + ")");
-        } else {
-            return("No");
         }
     }
 }

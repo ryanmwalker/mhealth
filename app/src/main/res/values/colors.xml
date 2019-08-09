@@ -10,8 +10,8 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorDivider">#B6B6B6</color>
 
-    <color name="graphX">#C90000</color>
-    <color name="graphY">#00C900</color>
-    <color name="graphZ">#0000C9</color>
+    <color name="red">#C90000</color>
+    <color name="green">#00C900</color>
+    <color name="blue">#0000C9</color>
 
 </resources>

@@ -86,7 +86,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         dbHelper = DBHelper.getInstance(getActivity(), new DatabaseHandler());
 
         //Set text and state of button depending on whether recording is in progress
-        if(MainActivity.dataRecordStarted & !MainActivity.dataRecordCompleted){
+        if (MainActivity.dataRecordStart & !MainActivity.dataRecordComplete & !MainActivity.dataRecordPaused) {
             explanationText.setText(getResources().getString(R.string.save_message_recording));
             saveButton.setEnabled(false);
         } else {
@@ -138,9 +138,13 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         switch(v.getId()){
 
             case R.id.saveButton:
+
                 alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        //Stop the service
+                        mainActivity.stopService(new Intent(mainActivity, SensorService.class));
+
                         //Save if sensor data exists, otherwise quit
                         if (subjectDataExists) {
                             new ExportDatabaseCSVTask().execute();
@@ -171,8 +175,11 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.resetButton:
+                //Stop the service
+                mainActivity.stopService(new Intent(mainActivity, SensorService.class));
+
                 dbHelper.resetSubjectData();
-                MainActivity.dataRecordStarted = false;
+                MainActivity.dataRecordStart = false;
                 mainActivity.addFragment(new StartFragment(), true);
                 break;
         }

@@ -25,7 +25,7 @@
     <dimen name="new_form_element_weight">60dp</dimen>
     <dimen name="new_input_weight_lb">65dp</dimen>
     <dimen name="new_weight_label_right_padding">20dp</dimen>
-    <dimen name="new_sex_label_right_padding">20dp</dimen>
+    <dimen name="new_gender_label_right_padding">20dp</dimen>
 
     <!-- Subject Info fragment -->
     <dimen name="subInfo_layout_padding">30dp</dimen>
