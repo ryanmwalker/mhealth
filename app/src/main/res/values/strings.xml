@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">mHealth</string>
+    <string name="app_name">mHealth_v2</string>
 
     <!-- Snackbars -->
     <string name="snackbar_request_permission">Request</string>
@@ -98,4 +98,7 @@
     <string name="_0">0</string>
     <string name="lbs">lbs</string>
 
+    <string name="directory">mHealth_v2</string>
+    <string name="csv_participant">participants.csv</string>
+    <string name="csv_sensors">walking.csv</string>
 </resources>

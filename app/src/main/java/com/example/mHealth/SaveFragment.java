@@ -228,7 +228,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
             //Create directories for the output csv files
             String pathToExternalStorage = Environment.getExternalStorageDirectory().toString();
-            File exportDir = new File(pathToExternalStorage, "/mHealth");
+            File exportDir = new File(pathToExternalStorage, "/mHealth_v2");
             File subjectDataDir = new File(exportDir, "/walking");
 
             publishProgress(5);
@@ -261,7 +261,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
                     //Backup the SQL DB file
                     File data = Environment.getDataDirectory();
-                    String currentDBPath = "//data//com.example.mHealth//databases//" + DBHelper.DATABASE_NAME;
+                    String currentDBPath = "//data//com.example.mHealth_v2//databases//" + DBHelper.DATABASE_NAME;
                     File currentDB = new File(data, currentDBPath);
                     File destDB = new File(exportDir, DBHelper.DATABASE_NAME);
 
@@ -282,7 +282,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                     SystemClock.sleep(300);
 
                     //Export subjects table/tracking sheet
-                    File trackingSheet = new File(exportDir, "status.csv");
+                    File trackingSheet = new File(exportDir, "participants.csv");
 
                     try {
                         dbHelper.exportTrackingSheet(trackingSheet);

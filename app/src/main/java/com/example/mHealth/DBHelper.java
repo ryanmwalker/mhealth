@@ -18,7 +18,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 public class DBHelper extends SQLiteOpenHelper {
     //Constants for db name and version
-    static final String DATABASE_NAME = "mHealth.db";
+    static final String DATABASE_NAME = "mHealth_v2.db";
     private static final String TAG = "DBHelper";
     //Constants for identifying subject table and fields
     private static final String SUBJECTS_TABLE_NAME = "subjects";
@@ -278,7 +278,7 @@ public class DBHelper extends SQLiteOpenHelper {
         subjectData.put(SUBJECTS_HEIGHT, height);
         subjectData.put(SUBJECTS_START_TIME, start_time);
         subjectData.put(SUBJECTS_STOP_TIME, stop_time);
-        subjectData.put(SUBJECTS_VALIDATION, "TRUE");
+        subjectData.put(SUBJECTS_VALIDATION, "true");
         db.insert(SUBJECTS_TABLE_NAME_TEMP, null, subjectData);
     }
 
