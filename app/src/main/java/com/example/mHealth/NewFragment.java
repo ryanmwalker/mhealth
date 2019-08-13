@@ -203,8 +203,8 @@ public class NewFragment extends Fragment implements AdapterView.OnItemSelectedL
                         hispanic,
                         weight,
                         height,
-                        0,
-                        0
+                        "0",
+                        "0"
                 );
 
                 //Hide the keyboard on clickDBHelper dbHelper;

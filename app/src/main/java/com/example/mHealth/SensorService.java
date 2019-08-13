@@ -14,11 +14,13 @@ import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -33,31 +35,33 @@ public class SensorService extends Service implements SensorEventListener {
     final short POLL_FREQUENCY = 9; //in milliseconds
 
     private long lastUpdate = -1;
-    long curTime;
-
-    private Messenger messageHandler;
+    long eventTime;
 
     private SensorManager sensorManager = null;
     private WakeLock wakeLock = null;
-    ExecutorService executor;
+    static ExecutorService executor;
     DBHelper dbHelper;
     Sensor sensor;
     Sensor accelerometer;
     Sensor gyroscope;
     Sensor gravity;
     Sensor magnetic;
+    Sensor rotationVector;
 
     float[] accelerometerMatrix = new float[3];
     float[] gyroscopeMatrix = new float[3];
     float[] gravityMatrix = new float[3];
     float[] magneticMatrix = new float[3];
     float[] rotationMatrix = new float[9];
+    float[] rotationVectorMatrix = new float [3];
 
     private void registerListener() {
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, gravity, SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, magnetic, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(this, rotationVector, SensorManager.SENSOR_DELAY_FASTEST);
+
     }
 
     private void unregisterListener() {
@@ -114,31 +118,27 @@ public class SensorService extends Service implements SensorEventListener {
             gravityMatrix = event.values;
         } else if (i == MainActivity.TYPE_MAGNETIC) {
             magneticMatrix = event.values;
+        } else if(i == MainActivity.TYPE_ROTATION) {
+            rotationVectorMatrix = event.values;
         }
 
         SensorManager.getRotationMatrix(rotationMatrix, null, gravityMatrix, magneticMatrix);
 
-        curTime = event.timestamp; //in nanoseconds
+        eventTime =  event.timestamp;
 
-        // only allow one update every POLL_FREQUENCY (convert from ms to nano for comparison).
-        if((curTime - lastUpdate) > POLL_FREQUENCY*1000000) {
+        // only allow one update every POLL_FREQUENCY (convert from ms to nano for comparison) when recording is not paused.
+        if((eventTime - lastUpdate) > POLL_FREQUENCY*1000000 & !MainActivity.dataRecordPaused) {
+            lastUpdate = eventTime;
 
-            lastUpdate = curTime;
-
-            //World coordinate system transformation - do in post processing instead
-            //accelerometerWorldMatrix[0] = rotationMatrix[0] * accelerometerMatrix[0] + rotationMatrix[1] * accelerometerMatrix[1] + rotationMatrix[2] * accelerometerMatrix[2];
-            //accelerometerWorldMatrix[1] = rotationMatrix[3] * accelerometerMatrix[0] + rotationMatrix[4] * accelerometerMatrix[1] + rotationMatrix[5] * accelerometerMatrix[2];
-            //accelerometerWorldMatrix[2] = rotationMatrix[6] * accelerometerMatrix[0] + rotationMatrix[7] * accelerometerMatrix[1] + rotationMatrix[8] * accelerometerMatrix[2];
-
-            //insert into database in background thread
-            try{
-                Runnable insertHandler = new InsertHandler(curTime, accelerometerMatrix, gyroscopeMatrix,
-                        gravityMatrix, magneticMatrix, rotationMatrix);
-                executor.execute(insertHandler);
-            } catch (SQLException e) {
-                Log.e(TAG, "insertData: " + e.getMessage(), e);
-            }
+            //insert into database in background thread if data is recording
+                try {
+                    Runnable insertHandler = new InsertHandler(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US).format(new Date(System.currentTimeMillis())), accelerometerMatrix, gyroscopeMatrix, gravityMatrix, magneticMatrix, rotationMatrix, rotationVectorMatrix);
+                    executor.execute(insertHandler);
+                } catch (SQLException e) {
+                    Log.e(TAG, "insertData: " + e.getMessage(), e);
+                }
         }
+
     }
 
     @SuppressLint("InvalidWakeLockTag")
@@ -153,6 +153,7 @@ public class SensorService extends Service implements SensorEventListener {
         gyroscope = sensorManager.getDefaultSensor(MainActivity.TYPE_GYROSCOPE);
         gravity = sensorManager.getDefaultSensor(MainActivity.TYPE_GRAVITY);
         magnetic = sensorManager.getDefaultSensor(MainActivity.TYPE_MAGNETIC);
+        rotationVector = sensorManager.getDefaultSensor(MainActivity.TYPE_ROTATION);
 
         PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
@@ -220,23 +221,26 @@ public class SensorService extends Service implements SensorEventListener {
     }
 
     class InsertHandler implements Runnable {
-        final long curTime;
+        final String curTime;
         final float[] accelerometerMatrix;
         final float[] gyroscopeMatrix;
         final float[] gravityMatrix;
         final float[] magneticMatrix;
         final float[] rotationMatrix;
+        final float[] rotationVectorMatrix;
 
         //Store the current sensor array values into THIS objects arrays, and db insert from this object
-        public InsertHandler(long curTime, float[] accelerometerMatrix,
+        public InsertHandler(String curTime, float[] accelerometerMatrix,
                              float[] gyroscopeMatrix, float[] gravityMatrix,
-                             float[] magneticMatrix, float[] rotationMatrix) {
+                             float[] magneticMatrix, float[] rotationMatrix,
+                             float[] rotationVectorMatrix){
             this.curTime = curTime;
             this.accelerometerMatrix = accelerometerMatrix;
             this.gyroscopeMatrix = gyroscopeMatrix;
             this.gravityMatrix = gravityMatrix;
             this.magneticMatrix = magneticMatrix;
             this.rotationMatrix = rotationMatrix;
+            this.rotationVectorMatrix = rotationVectorMatrix;
         }
 
         public void run() {
@@ -244,7 +248,8 @@ public class SensorService extends Service implements SensorEventListener {
                     this.curTime,
                     this.accelerometerMatrix,
                     this.gyroscopeMatrix,
-                    this.rotationMatrix);
+                    this.rotationMatrix,
+                    this.rotationVectorMatrix);
         }
     }
 }

@@ -35,6 +35,10 @@
                     android:id="@+id/nav_gyroscope"
                     android:icon="@drawable/ic_timeline_grey_24dp"
                     android:title="@string/nav_gyroscope" />
+                <item
+                    android:id="@+id/nav_rotation_vector"
+                    android:icon="@drawable/ic_timeline_grey_24dp"
+                    android:title="@string/nav_rotation_vector" />
             </group>
         </menu>
     </item>

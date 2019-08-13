@@ -86,7 +86,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         dbHelper = DBHelper.getInstance(getActivity(), new DatabaseHandler());
 
         //Set text and state of button depending on whether recording is in progress
-        if (MainActivity.dataRecordStart & !MainActivity.dataRecordComplete & !MainActivity.dataRecordPaused) {
+        if (MainActivity.dataRecordStart & !MainActivity.dataRecordPaused) {
             explanationText.setText(getResources().getString(R.string.save_message_recording));
             saveButton.setEnabled(false);
         } else {

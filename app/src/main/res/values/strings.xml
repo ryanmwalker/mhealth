@@ -22,6 +22,7 @@
     <string name="nav_accelerometer">Accelerometer</string>
     <string name="nav_gravity">Gravity</string>
     <string name="nav_gyroscope">Gyroscope</string>
+    <string name="nav_rotation_vector">Rotation Vector</string>
 
     <!-- New participant fragment-->
     <string name="input_text_id">ID:</string>

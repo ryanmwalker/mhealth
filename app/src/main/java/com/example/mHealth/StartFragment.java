@@ -17,7 +17,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.SimpleTimeZone;
 
 public class StartFragment extends Fragment implements View.OnClickListener {
 
@@ -68,7 +72,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
         //Set button state depending on whether recording has been started and/or stopped
         if (MainActivity.dataRecordStart) {
-            if (MainActivity.dataRecordPaused && !MainActivity.dataRecordComplete) {
+            if (MainActivity.dataRecordPaused) {
                 startButton.setEnabled(true);
                 startButton.setText(R.string.start_button_label_resume);
                 startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.green));
@@ -112,7 +116,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                 startButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.red));
 
                 //Insert start time of recording
-                dbHelper.setStartTime(dbHelper.getTempSubInfo("subID"), System.currentTimeMillis());
+                dbHelper.setStartTime(dbHelper.getTempSubInfo("subID"), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US).format(new Date(System.currentTimeMillis())));
 
                 //Start the service
                 Intent startService = new Intent(mainActivity, SensorService.class);
@@ -137,13 +141,9 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             mImageViewWalk.setVisibility(View.INVISIBLE);
 
             //Insert pause or stop time of recording
-            dbHelper.setStopTime(dbHelper.getTempSubInfo("subID"), System.currentTimeMillis());
-
-
+            dbHelper.setStopTime(dbHelper.getTempSubInfo("subID"), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US).format(new Date(System.currentTimeMillis())));
             //Show snackbar message for recording complete
             Snackbar.make(coordinatorLayout, R.string.start_recording_complete, Snackbar.LENGTH_SHORT).show();//Change fragment to subject info screen. Do not add this fragment to the backstack
-        } else {
-
         }
     }
 }

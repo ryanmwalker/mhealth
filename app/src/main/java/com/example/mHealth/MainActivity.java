@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -39,15 +38,12 @@ public class MainActivity extends AppCompatActivity
     LayoutInflater inflater;
     ActionBarDrawerToggle hamburger;
     FragmentManager fragmentManager;
-    SensorManager mSensorManager;
     DBHelper dbHelper;
     public Logger logger;
 
     //App flags
     public static Boolean dataRecordStart;
-    public static Boolean dataRecordStop;
-    public static Boolean dataRecordComplete = false;
-    public static Boolean dataRecordPaused = false;
+    public static Boolean dataRecordPaused;
     public static Boolean subCreated;
 
     //Set sensors used in app
@@ -55,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     public final static short TYPE_GYROSCOPE = Sensor.TYPE_GYROSCOPE;
     public final static short TYPE_GRAVITY = Sensor.TYPE_GRAVITY;
     public final static short TYPE_MAGNETIC = Sensor.TYPE_MAGNETIC_FIELD;
+    public final static short TYPE_ROTATION = Sensor.TYPE_ROTATION_VECTOR;
 
     final String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -113,8 +110,6 @@ public class MainActivity extends AppCompatActivity
 
         //Set app flags on create/recreate
         dataRecordStart = false;
-        dataRecordStop = false;
-        dataRecordComplete = false;
         dataRecordPaused = false;
 
         subCreated = false;
@@ -206,6 +201,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_gyroscope:
                 addFragment(new GyroscopeFragment(), true);
+                break;
+            case R.id.nav_rotation_vector:
+                addFragment(new RotationalVectorFragment(), true);
                 break;
         }
 

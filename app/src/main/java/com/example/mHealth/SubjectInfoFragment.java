@@ -51,7 +51,7 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
         deleteMessage = view.findViewById(R.id.subInfo_delete_message);
 
         //Set state of delete button depending on whether recording is ongoing
-        if (MainActivity.dataRecordStart & !MainActivity.dataRecordComplete) {
+        if (MainActivity.dataRecordStart & !MainActivity.dataRecordPaused) {
             deleteButton.setEnabled(false);
             deleteMessage.setText(R.string.subInfo_message_recording);
         } else {
@@ -67,15 +67,12 @@ public class SubjectInfoFragment extends Fragment implements View.OnClickListene
         TextView subID = view.findViewById(R.id.subInfo_value_subID);
         TextView first = view.findViewById(R.id.subInfo_value_first);
         TextView last = view.findViewById(R.id.subInfo_value_last);
-        TextView gender = view.findViewById(R.id.subInfo_value_gender);
 
         //Set the text view elements in layout to subject info from temp table
         date.setText(dbHelper.getTempSubInfo("date"));
         subID.setText(dbHelper.getTempSubInfo("subID"));
         first.setText(dbHelper.getTempSubInfo("first"));
         last.setText(dbHelper.getTempSubInfo("last"));
-        gender.setText(dbHelper.getTempSubInfo("gender"));
-
 
         // Inflate the layout for this fragment
         return view;
