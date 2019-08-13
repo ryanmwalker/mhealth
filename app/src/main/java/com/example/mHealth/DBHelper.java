@@ -75,7 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATA_TABLE_NAME = "data";
     private static final String DATA_TABLE_NAME_TEMP = "data_temp";
     private static final String DATA_SUBJECT = "id";
-    private static final String DATA_TIME = "time";
+    private static final String DATA_TIME = "event_time";
     private static final String DATA_ACCX = "accX";
 
     //SQL to create subject table
@@ -409,7 +409,7 @@ public class DBHelper extends SQLiteOpenHelper {
         MainActivity.dataRecordPaused = false;
     }
 
-    void insertDataTemp(String subID, String time,
+    void insertDataTemp(String subID, String event_time,
                         float[] acc,
                         float[] gyro,
                         float[] rot,
@@ -418,7 +418,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues sensorValues = new ContentValues();
 
         sensorValues.put(DATA_SUBJECT, subID);
-        sensorValues.put(DATA_TIME, time);
+        sensorValues.put(DATA_TIME, event_time);
         sensorValues.put(DATA_ACCX, acc[0]);
         sensorValues.put(DATA_ACCY, acc[1]);
         sensorValues.put(DATA_ACCZ, acc[2]);

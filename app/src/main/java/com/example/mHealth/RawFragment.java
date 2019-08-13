@@ -22,6 +22,7 @@ public class RawFragment extends Fragment implements SensorEventListener {
     private Sensor gyroscope;
     private Sensor gravity;
     private Sensor magnetic;
+    private Sensor rotation;
 
     MainActivity mainActivity;
     TextView accX;
@@ -39,13 +40,16 @@ public class RawFragment extends Fragment implements SensorEventListener {
     TextView rot7;
     TextView rot8;
     TextView rot9;
+    TextView rotX;
+    TextView rotY;
+    TextView rotZ;
 
     float[] accelerometerMatrix = new float[3];
-    float[] accelerometerWorldMatrix = new float[3];
     float[] gyroscopeMatrix = new float[3];
     float[] gravityMatrix = new float[3];
     float[] magneticMatrix = new float[3];
     float[] rotationMatrix = new float[9];
+    float[] rotationVectorMatrix = new float [3];
 
     public RawFragment() {
         // Required empty public constructor
@@ -70,7 +74,7 @@ public class RawFragment extends Fragment implements SensorEventListener {
         gyroscope = sensorManager.getDefaultSensor(MainActivity.TYPE_GYROSCOPE);
         gravity = sensorManager.getDefaultSensor(MainActivity.TYPE_GRAVITY);
         magnetic = sensorManager.getDefaultSensor(MainActivity.TYPE_MAGNETIC);
-
+        rotation = sensorManager.getDefaultSensor(MainActivity.TYPE_ROTATION);
         //Get text fields
         accX = view.findViewById(R.id.raw_value_acc_x);
         accY = view.findViewById(R.id.raw_value_acc_y);
@@ -87,6 +91,9 @@ public class RawFragment extends Fragment implements SensorEventListener {
         rot7 = view.findViewById(R.id.raw_value_rot_7);
         rot8 = view.findViewById(R.id.raw_value_rot_8);
         rot9 = view.findViewById(R.id.raw_value_rot_9);
+        rotX = view.findViewById(R.id.raw_value_rot_x);
+        rotY = view.findViewById(R.id.raw_value_rot_y);
+        rotZ = view.findViewById(R.id.raw_value_rot_z);
 
         return view;
     }
@@ -98,6 +105,7 @@ public class RawFragment extends Fragment implements SensorEventListener {
         sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, gravity, SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, magnetic, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
@@ -119,6 +127,8 @@ public class RawFragment extends Fragment implements SensorEventListener {
             gravityMatrix = event.values;
         } else if (i == MainActivity.TYPE_MAGNETIC) {
             magneticMatrix = event.values;
+        } else if (i == MainActivity.TYPE_ROTATION) {
+            rotationVectorMatrix = event.values;
         }
 
         long curTime = System.currentTimeMillis();
@@ -129,10 +139,6 @@ public class RawFragment extends Fragment implements SensorEventListener {
             lastUpdate = curTime;
 
             SensorManager.getRotationMatrix(rotationMatrix, null, gravityMatrix, magneticMatrix);
-
-            accelerometerWorldMatrix[0] = rotationMatrix[0] * accelerometerMatrix[0] + rotationMatrix[1] * accelerometerMatrix[1] + rotationMatrix[2] * accelerometerMatrix[2];
-            accelerometerWorldMatrix[1] = rotationMatrix[3] * accelerometerMatrix[0] + rotationMatrix[4] * accelerometerMatrix[1] + rotationMatrix[5] * accelerometerMatrix[2];
-            accelerometerWorldMatrix[2] = rotationMatrix[6] * accelerometerMatrix[0] + rotationMatrix[7] * accelerometerMatrix[1] + rotationMatrix[8] * accelerometerMatrix[2];
 
             accX.setText(String.format("%.2f", accelerometerMatrix[0]));
             accY.setText(String.format("%.2f", accelerometerMatrix[1]));
@@ -149,6 +155,9 @@ public class RawFragment extends Fragment implements SensorEventListener {
             rot7.setText(String.format("%.2f", rotationMatrix[6]));
             rot8.setText(String.format("%.2f", rotationMatrix[7]));
             rot9.setText(String.format("%.2f", rotationMatrix[8]));
+            rotX.setText(String.format("%.2f", rotationVectorMatrix[0]));
+            rotY.setText(String.format("%.2f", rotationVectorMatrix[1]));
+            rotZ.setText(String.format("%.2f", rotationVectorMatrix[2]));
         }
     }
 

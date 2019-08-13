@@ -52,6 +52,8 @@
     <string name="raw_acc_world_header">Accelerometer (world basis)</string>
     <string name="raw_gyro_header">Gyroscope</string>
     <string name="raw_rotation_header">Rotation Matrix</string>
+    <string name="raw_rotation_vector_header">Rotation Vector</string>
+
 
     <!-- Subject info fragment -->
     <string name="subInfo_label_date">Date:</string>

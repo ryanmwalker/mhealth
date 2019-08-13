@@ -142,12 +142,82 @@
         android:layout_height="@dimen/raw_spacer_height"
         android:layout_below="@+id/raw_label_gyro_z" />
 
+    <TextView
+        android:id="@+id/raw_label_rotationVector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/raw_gyro_spacer"
+        android:paddingBottom="@dimen/raw_header_bottom_pad"
+        android:text="@string/raw_rotation_vector_header"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/raw_label_rot_x"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/raw_label_rotationVector"
+        android:paddingRight="@dimen/raw_axes_right_pad"
+        android:text="X:"
+        android:textColor="@color/red" />
+
+    <TextView
+        android:id="@+id/raw_label_rot_y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/raw_label_rot_x"
+        android:paddingRight="@dimen/raw_axes_right_pad"
+        android:text="Y:"
+        android:textColor="@color/green" />
+
+    <TextView
+        android:id="@+id/raw_label_rot_z"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/raw_label_rot_y"
+        android:paddingRight="@dimen/raw_axes_right_pad"
+        android:text="Z:"
+        android:textColor="@color/blue" />
+
+    <TextView
+        android:id="@+id/raw_value_rot_x"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/raw_label_rot_x"
+        android:layout_alignBottom="@+id/raw_label_rot_x"
+        android:layout_toEndOf="@+id/raw_label_rot_x"
+        android:textColor="@color/red" />
+
+    <TextView
+        android:id="@+id/raw_value_rot_y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/raw_label_rot_y"
+        android:layout_alignBottom="@+id/raw_label_rot_y"
+        android:layout_toEndOf="@+id/raw_label_rot_y"
+        android:textColor="@color/green" />
+
+    <TextView
+        android:id="@+id/raw_value_rot_z"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/raw_label_rot_z"
+        android:layout_alignBottom="@+id/raw_label_rot_z"
+        android:layout_toEndOf="@+id/raw_label_rot_z"
+        android:textColor="@color/blue" />
+
+    <Space
+        android:id="@+id/raw_rot_spacer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/raw_spacer_height"
+        android:layout_below="@+id/raw_label_rot_z" />
+
 
     <TextView
         android:id="@+id/raw_label_rotationMatrix"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/raw_gyro_spacer"
+        android:layout_below="@+id/raw_rot_spacer"
         android:paddingBottom="@dimen/raw_header_bottom_pad"
         android:text="@string/raw_rotation_header"
         android:textAppearance="?android:attr/textAppearanceMedium" />
